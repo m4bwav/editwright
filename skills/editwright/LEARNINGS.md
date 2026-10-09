@@ -6,12 +6,10 @@ Write an entry the moment a real signal happens: a user correction, the same err
 
 ## Active
 
-<!-- Example (delete once you have a real entry):
-### L-001 · 2026-10-08 · One-line lesson in plain words
-- Trigger: what happened, with dates or counts
-- Hypothesis: why
-- Rule: the shortest instruction that prevents the trigger
-- Evidence: C-20261008-1, T-20261008-1, confirmed 2026-10-08
-- Scope: skill | repo:<slug> | env:<name> | global
-- Status: active · helpful 1 · harmful 0 · last_confirmed 2026-10-08
--->
+### L-001 · 2026-10-08 · corrections-of-own-words-counted-as-ai: real typo and tense fixes counted as AI-written words
+- Trigger: first real short-story pass (3,986 words), 2026-10-08. Of 35 proposed changes, three were scored as one AI-written word each although each only corrected the author's own word: says to said and road to rode (two edits on a four-letter word; the rule allows one) and blanks to planks (first letter differs; the author writes "planks" in the next sentence).
+- Hypothesis: the correction rule (same first letter, at most one edit up to four letters) misses irregular verb forms and first-letter typos, and it ignores words the author already used nearby.
+- Rule: count a replacement word as the author's when it is a known inflection of the removed word (irregular forms included) or when the same word appears in the author's text of the same or next paragraph; keep everything else strict.
+- Evidence: job ledger of 2026-10-08 (private works store), T-20261008-3
+- Scope: skill
+- Status: active · helpful 0 · harmful 0 · last_confirmed 2026-10-08
