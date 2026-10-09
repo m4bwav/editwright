@@ -28,7 +28,7 @@ import zipfile
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 
 # Default limits on AI-written words that apply may bring in while human-authored mode is on.
 # Reasons: ai-docs/decisions (word thresholds). Fiction, poetry and scripts: none at all.
@@ -484,18 +484,68 @@ def osa(a, b):
     return d[-1][-1]
 
 
+# Irregular forms of one word: changing between them is a tense or agreement fix of the author's own word.
+IRREGULAR = [g.split() for g in """be is am are was were been being|have has had having|do does did done doing
+|say says said saying|go goes went gone going|ride rides rode ridden riding|see sees saw seen seeing
+|come comes came coming|take takes took taken taking|give gives gave given giving|get gets got gotten getting
+|make makes made making|know knows knew known knowing|think thinks thought thinking|run runs ran running
+|shine shines shone shined shining|lie lies lay lain lying|lay lays laid laying|bring brings brought
+|buy buys bought|catch catches caught|teach teaches taught|feel feels felt|find finds found|hold holds held
+|keep keeps kept|leave leaves left|lose loses lost|mean means meant|meet meets met|pay pays paid|sell sells sold
+|send sends sent|sit sits sat|speak speaks spoke spoken|stand stands stood|tell tells told|win wins won
+|write writes wrote written|begin begins began begun|break breaks broke broken|choose chooses chose chosen
+|drive drives drove driven|eat eats ate eaten|fall falls fell fallen|fly flies flew flown|forget forgot forgotten
+|grow grows grew grown|hide hides hid hidden|rise rises rose risen|sing sings sang sung|swim swims swam swum
+|throw throws threw thrown|wear wears wore worn|wake wakes woke woken|draw draws drew drawn|drink drinks drank drunk
+|ring rings rang rung|shake shakes shook shaken|steal steals stole stolen|strike strikes struck|spin spins spun
+|dig digs dug|hang hangs hung|feed feeds fed|lead leads led|fight fights fought|seek seeks sought|sleep sleeps slept
+|sweep sweeps swept|weep weeps wept|bend bends bent|build builds built|spend spends spent|light lights lit
+|slide slides slid|bite bites bit bitten|hit hits|cut cuts|put puts|set sets|let lets|shut shuts|this these
+|that those|it its it's|they them their they're|you your you're|who whom whose|a an""".split("|")]
+# Words commonly typed for one another (homophones and near misses); swapping between them fixes a slip.
+CONFUSED = [g.split() for g in """road rode rowed|there their they're|to too two|then than|lose loose|affect effect
+|accept except|passed past|whose who's|brake break|peak peek pique|site sight cite|rain reign rein|here hear
+|threw through thru|waist waste|weather whether|which witch|principal principle|stationary stationery
+|complement compliment|breath breathe|already all|altogether together|advice advise|desert dessert|wander wonder
+|quiet quite|were where we're|your you're|its it's|of off|lead led|board bored|course coarse|hole whole
+|right write rite|knew new|know no|piece peace|plain plane|sole soul|tail tale|wait weight|week weak|wood would
+|bare bear|buy by bye|dear deer|fair fare|flour flower|for four fore|hair hare|heal heel|hour our|made maid
+|mail male|meat meet|one won|pair pear|pole poll|pray prey|red read|role roll|sail sale|scene seen|sew so sow
+|some sum|son sun|stair stare|steal steel|tied tide|toe tow|vain vein|way weigh|wear ware where""".split("|")]
+IRREGULAR_GROUP = {w: i for i, g in enumerate(IRREGULAR) for w in g}
+CONFUSED_GROUPS = {}
+for _i, _g in enumerate(CONFUSED):
+    for _w in _g:
+        CONFUSED_GROUPS.setdefault(_w, set()).add(_i)
+
+
 def is_correction(new, old):
-    """A spelling fix or inflection of the author's own word: same first letter (or its first two
-    letters swapped), at most one edit for short words and two for longer ones."""
+    """A spelling fix or inflection of the author's own word: two forms of one irregular word, or the
+    same first letter (or its first two letters swapped) with at most one edit for short words and two
+    for longer ones."""
+    if new in IRREGULAR_GROUP and IRREGULAR_GROUP.get(old) == IRREGULAR_GROUP[new]:
+        return True
+    if CONFUSED_GROUPS.get(new, set()) & CONFUSED_GROUPS.get(old, set()):
+        return True
     if new[:1] != old[:1] and new[:2] != old[1::-1]:
         return False
     limit = 1 if max(len(new), len(old)) <= 4 else 2
     return osa(new, old) <= limit
 
 
-def provenance(find, replace):
+def nearby_words(text, para):
+    """The author's own content words in paragraph para and the paragraphs on either side of it."""
+    paras = paragraphs(text)
+    if not para:
+        return set()
+    near = paras[max(para - 2, 0):para + 1]
+    return {w for w in word_key(" ".join(near)) if w not in STOP and len(w) > 3}
+
+
+def provenance(find, replace, nearby=None):
     """Classify the words of a replacement: reused from the span it replaces, a spelling or inflection
-    correction of a removed word, or new (AI-written). Punctuation is not counted."""
+    correction of a removed word, a word the author wrote nearby put in place of a removed word, or new
+    (AI-written). Punctuation is not counted."""
     old = [norm_word(w) for w in words(find)]
     new = [norm_word(w) for w in words(replace)]
     pool = collections.Counter(old)
@@ -508,12 +558,17 @@ def provenance(find, replace):
         else:
             unmatched.append(w)
     removed = list(pool.elements())
-    corrected, added = [], []
+    corrected, added, own = [], [], []
     for w in unmatched:
         hit = next((r for r in removed if is_correction(w, r)), None)
         if hit is not None:
             removed.remove(hit)
             corrected.append("%s>%s" % (hit, w))
+        elif nearby and removed and w in nearby:
+            # One-for-one swap to a word the author already wrote beside this passage (blanks > planks).
+            hit = removed.pop(0)
+            corrected.append("%s>%s (the author's word nearby)" % (hit, w))
+            own.append(w)
         else:
             added.append(w)
     if added:
@@ -532,6 +587,17 @@ def provenance(find, replace):
 
 # ---------------------------------------------------------------- intake
 
+def remove_tree(path):
+    """rmtree that also removes the read-only snapshot (Windows refuses to delete read-only files)."""
+    def again(func, p, _exc):
+        os.chmod(p, 0o666)
+        func(p)
+    if sys.version_info >= (3, 12):
+        shutil.rmtree(path, onexc=again)
+    else:
+        shutil.rmtree(path, onerror=again)
+
+
 def cmd_intake(a):
     src = Path(a.source).expanduser().resolve()
     if not src.is_file():
@@ -547,6 +613,7 @@ def cmd_intake(a):
             break
         n += 1
     src_hash = sha256_file(src)
+    raw, read_as = source_text(src, a.text)  # refuse unreadable sources before anything is written
     jdir.mkdir(parents=True)
     snap = jdir / ("source" + src.suffix.lower())
     shutil.copy2(src, snap)
@@ -556,12 +623,11 @@ def cmd_intake(a):
         os.chmod(snap, 0o444)
     except OSError:
         pass
-    raw, read_as = source_text(src, a.text)
     clean, log = cleanup(raw, quotes=a.quotes, dashes=a.dashes,
                          keep_lines=a.keep_lines or a.genre in ("script", "poetry"), headings=not a.no_headings)
     diff = check_words_same(raw, clean)
     if diff:
-        shutil.rmtree(jdir)
+        remove_tree(jdir)
         fail("cleanup changed a word (%s); nothing written. Report this as a bug." % diff)
     write_text(jdir / "source-text.md", raw if raw.endswith("\n") else raw + "\n")
     write_text(jdir / "clean.md", clean)
@@ -859,7 +925,7 @@ def validate_suggestion(s, text, genre):
     if ch is not None:
         if "replace" not in ch:
             raise ValueError("%s: change needs 'replace' (use \"\" for a cut)" % s.get("id", "?"))
-        pv = provenance(quote, ch["replace"])
+        pv = provenance(quote, ch["replace"], nearby_words(text, s.get("para")))
         s["provenance"] = pv
         s["ai_words"] = pv["new_word_count"]
         s["marked_ai_text"] = pv["new_word_count"] > 0
@@ -884,20 +950,23 @@ def cmd_suggest(a):
     incoming = load_json(a.file)
     if isinstance(incoming, dict):
         incoming = incoming.get("suggestions", [])
-    errors, added = [], []
-    for s in incoming:
+    def key(s):
+        return (s.get("level"), s.get("category"), s.get("para"), s.get("quote"), json.dumps(s.get("change"), sort_keys=True))
+
+    seen = {key(x) for x in data["suggestions"]}
+    errors, added, dupes = [], [], 0
+    for n, s in enumerate(incoming, 1):
         s = dict(s)
-        if not s.get("id") or any(x["id"] == s["id"] for x in data["suggestions"]):
+        if key(s) in seen:
+            dupes += 1  # resubmitting a file after fixing its refused items adds only the fixed ones
+            continue
+        if not s.get("id") or any(x["id"] == s["id"] for x in data["suggestions"] + added):
             s["id"] = next_id(data["suggestions"] + added)
         try:
             added.append(validate_suggestion(s, text, job["genre"]))
+            seen.add(key(s))
         except ValueError as e:
-            errors.append(str(e))
-    if errors:
-        print("refused %d suggestion(s); nothing saved:" % len(errors))
-        for e in errors:
-            print("  - " + e)
-        return 1
+            errors.append("item %d: %s" % (n, e))
     data["suggestions"].extend(added)
     data["suggestions"].sort(key=lambda s: (LEVELS.index(s["level"]), s.get("span", [10 ** 9])[0]))
     save_json(jdir / "suggestions.json", data)
@@ -907,7 +976,15 @@ def cmd_suggest(a):
     if marked and job["mode"] == "human-authored" and job["threshold"]["words"] == 0:
         print("note: human-authored mode with a 0-word limit; apply will refuse these unless the author supplies "
               "the words (--author-text) or the job is overridden")
+    if dupes:
+        print("skipped %d already in suggestions.json" % dupes)
     write_views(jdir)
+    if errors:
+        print("refused %d suggestion(s) (the others were saved); fix these and run suggest again with the same file:" % len(errors))
+        for e in errors:
+            print("  - " + e)
+        print("quotes must match `ew.py show` exactly, curly quotes and apostrophes included")
+        return 1
     return 0
 
 
@@ -1092,7 +1169,22 @@ def echoed_words(s, author_text):
     offered = set(word_key(" ".join([(s.get("change") or {}).get("replace", "")] + list(s.get("options", [])))))
     offered -= set(word_key(s.get("quote", "")))
     new = provenance(s.get("quote", ""), author_text)["new_words"]
-    return [w for w in new if w in offered and w not in STOP]
+    # Common words count too when they sit in a run of three or more words copied from the suggestion.
+    offered_seq = word_key(" ".join([(s.get("change") or {}).get("replace", "")] + list(s.get("options", []))))
+    grams = {tuple(offered_seq[i:i + 3]) for i in range(len(offered_seq) - 2)}
+    mine = word_key(author_text)
+    copied = set()
+    for i in range(len(mine) - 2):
+        if tuple(mine[i:i + 3]) in grams:
+            copied.update(range(i, i + 3))
+    copied_words = collections.Counter(mine[i] for i in copied)
+    out = []
+    for w in new:
+        if w in offered and (w not in STOP or copied_words[w] > 0):
+            out.append(w)
+            if copied_words[w]:
+                copied_words[w] -= 1
+    return out
 
 
 def within_limit(job, ai, pct):
@@ -1186,9 +1278,11 @@ def cmd_apply(a):
           "| ID | Para | Before | After | Words | Who wrote the new words |", "|---|---|---|---|---|---|"]
     for x in plan:
         s = by_id[x["id"]]
-        pv = provenance(x["old"], x["new"])
+        pv = provenance(x["old"], x["new"], nearby_words(text, s.get("para")))
+        words_note = ("the author wrote %d new word(s)%s" % (pv["new_word_count"], "; %d echo the suggestion" % len(x["echoed"]) if x["echoed"] else "")
+                      if x["author_text"] else describe_pv(pv))
         cl.append("| %s | P%s | %s | %s | %s | %s |" % (x["id"], s.get("para"), x["old"].replace("|", "/")[:120],
-                                                     (x["new"] or "(cut)").replace("|", "/")[:120], describe_pv(pv),
+                                                     (x["new"] or "(cut)").replace("|", "/")[:120], words_note,
                                                      ("author; echoes editwright's wording: %s" % " ".join(x["echoed"]) if x["echoed"] else "author")
                                                      if x["author_text"] else ("editwright (AI)" if x["ai_words"] else "nobody: author's own words")))
     write_text(target.with_name(target.stem + "-changelog.md"), "\n".join(cl) + "\n")

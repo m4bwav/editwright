@@ -47,7 +47,7 @@ Ask in your own words: "edit my short story ./story.md", "give me an editorial l
 
 ## Privacy
 
-editwright makes no network calls and sends your manuscript nowhere beyond the agent you already use. Manuscripts, style sheets, story bibles and your preferences are kept in a works folder on your machine: `~/editwright-works` by default, or the folder named by `EDITWRIGHT_WORKS` or by `works` in `~/.editwright.json`. Point it at a private, backed-up folder. Nothing about your work is written to this repository.
+editwright makes no network calls and sends your manuscript nowhere beyond the agent you already use. Manuscripts, style sheets, story bibles and your preferences are kept in a works folder on your machine. The first of these wins: the `--works` option, the `EDITWRIGHT_WORKS` variable, `works` in a `.editwright.json` in the current folder, `works` in `~/.editwright.json` (another file can be named with `EDITWRIGHT_CONFIG`), and otherwise `~/editwright-works`. Point it at a private, backed-up folder. Nothing about your work is written to this repository.
 
 ## How it was built
 

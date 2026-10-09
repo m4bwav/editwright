@@ -1,6 +1,6 @@
 # Suggestion format
 
-Read when writing the JSON file for `ew.py suggest`. The script validates every item and refuses the whole file if one is wrong; nothing is saved until all pass.
+Read when writing the JSON file for `ew.py suggest`. The script validates every item, saves the valid ones and lists the refused ones by item number. Fix those and run `suggest` again with the same file: items already saved are skipped.
 
 ```json
 [
