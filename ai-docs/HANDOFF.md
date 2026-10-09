@@ -13,7 +13,7 @@ Updated 2026-10-08. Read this first, then [log.md](log.md) and [next-session-pro
 ## In progress
 
 - The owner reviews the letter and suggestions and says which IDs they accept and what felt off.
-- README hero image: a background run was still generating at the end of the session; if no hero-image pull request exists, make one (comfyui-gen skill, banner at assets/banner.jpg like cinewright).
+- README banner: pull request #3 (assets/banner.jpg, Z-Image Turbo, type band softened; workflow in assets/banner-workflow.api.json). Lesson filed in comfyui-gen as L-037 (its PR #11).
 
 ## 0.1.1 (pull request #2, waiting for review)
 
