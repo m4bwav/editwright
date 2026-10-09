@@ -1,0 +1,108 @@
+{
+  "skill": "editwright",
+  "_format": "skill-creator evals.json plus evergreen fields (kind, decoy, evidence, baseline); extra fields are ignored by skill-creator's runner. The runnable copies are the case folders in the repository's root evals/ (claude plugin eval format), written by evals/build_cases.py.",
+  "evals": [
+    {
+      "id": "trigger-1",
+      "kind": "trigger",
+      "prompt": "Can you edit my short story? It's in ./drafts/lighthouse.md. I want to know what isn't working and get a proofread.",
+      "expectations": [
+        "the editwright skill is invoked"
+      ],
+      "runs": 3
+    },
+    {
+      "id": "trigger-2",
+      "kind": "trigger",
+      "prompt": "give me an editorial letter for chapter 3 of my novel, it's ~/novel/ch03.docx",
+      "expectations": [
+        "the editwright skill is invoked"
+      ],
+      "runs": 3
+    },
+    {
+      "id": "trigger-3",
+      "kind": "trigger",
+      "prompt": "proofread my essay before I send it to the magazine: ./essay.md",
+      "expectations": [
+        "the editwright skill is invoked"
+      ],
+      "runs": 3
+    },
+    {
+      "id": "decoy-1",
+      "kind": "trigger",
+      "prompt": "write me a short story about a lighthouse keeper who finds a message in a bottle",
+      "expectations": [
+        "the editwright skill is not invoked (writing new prose is not editing)"
+      ],
+      "runs": 3,
+      "decoy": true
+    },
+    {
+      "id": "decoy-2",
+      "kind": "trigger",
+      "prompt": "humanize this, it reads like AI wrote it: ...",
+      "expectations": [
+        "the editwright skill is not invoked (humanizing is everwrite's job)"
+      ],
+      "runs": 3,
+      "decoy": true
+    },
+    {
+      "id": "action-1",
+      "kind": "action",
+      "prompt": "Line edit and proofread my short story ./story.txt. Give me your suggestions, but don't change anything yet.",
+      "expectations": [
+        "ew.py intake and suggest ran",
+        "suggestions.json and provenance-ledger.md exist in the works store",
+        "no edited*.md exists",
+        "last-check.txt starts with PASSED",
+        "story.txt still holds its typo and adverb (unchanged)"
+      ],
+      "runs": 3,
+      "evidence": "graders in ../../../evals/action-1/graders (files and trace, never the reply alone)",
+      "baseline": "without the skill the model edits story.txt in place or prints a rewritten story; no ledger"
+    },
+    {
+      "id": "action-2",
+      "kind": "action",
+      "prompt": "I read your suggestions for my lighthouse story. Apply S-004 please.",
+      "expectations": [
+        "ew.py apply ran",
+        "no edited*.md exists (S-004 brings in AI-written words in human-authored mode)",
+        "the reply explains the limit",
+        "story.txt unchanged"
+      ],
+      "runs": 3,
+      "evidence": "graders in ../../../evals/action-2/graders (files and trace, never the reply alone)",
+      "baseline": "without the skill there is no job; the model guesses or asks"
+    },
+    {
+      "id": "action-3",
+      "kind": "action",
+      "prompt": "I read your suggestions for my lighthouse story. Apply S-001 and S-002, nothing else.",
+      "expectations": [
+        "ew.py apply ran",
+        "edited.md holds both accepted changes",
+        "edited.md holds neither S-004's nor S-005's change",
+        "story.txt unchanged"
+      ],
+      "runs": 3,
+      "evidence": "graders in ../../../evals/action-3/graders (files and trace, never the reply alone)"
+    },
+    {
+      "id": "outcome-1",
+      "kind": "outcome",
+      "prompt": "Here's a short story I wrote, ./story.txt. Edit it like a professional editor would and tell me what you'd change.",
+      "expectations": [
+        "story.txt unchanged",
+        "nothing applied",
+        "the reply names anchored issues (typo, POV slip, filter verbs), explains why, asks which to accept, and rewrites no sentences (judge)"
+      ],
+      "runs": 3,
+      "evidence": "graders in ../../../evals/outcome-1/graders (files and trace, never the reply alone)",
+      "baseline": "without the skill the model tends to return a revised story"
+    }
+  ]
+}

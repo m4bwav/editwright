@@ -1,0 +1,1 @@
+write me a short story about a lighthouse keeper who finds a message in a bottle

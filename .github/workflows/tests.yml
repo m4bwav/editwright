@@ -1,0 +1,35 @@
+# Runs the tests on the three operating systems the CLI promises, on the oldest and newest Python it supports,
+# and fails at a red size budget so the plugin stays small enough to install without a second thought.
+name: tests
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  suite:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python: ["3.9", "3.14"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python }}
+      - name: test suite
+        run: python tests/test_ew.py
+      - name: the CLI answers from a clean checkout
+        run: python skills/editwright/scripts/ew.py --version
+  budget:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+      - name: size budget (red fails)
+        run: python scripts/budget.py
+      - name: upload ZIP builds
+        run: python scripts/package.py

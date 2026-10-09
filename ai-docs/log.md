@@ -1,0 +1,10 @@
+# Log
+
+Append-only. One line per operation: `## [YYYY-MM-DD] op | title` where op is one of add, update, supersede, verify, verify-failed, prune, handoff, index. Newest at the bottom. Never edited, only appended; this is the history the entries themselves do not carry.
+
+## [2026-10-08] init | scaffolded
+## [2026-10-08] add | decision: One skill with an on-demand kb, not sibling skills
+## [2026-10-08] add | decision: Human-authored defaults and how AI-written words are counted
+## [2026-10-08] add | decision: Works store in the vault sidecar, docs sync off for a public repo
+## [2026-10-08] index | rebuilt (3 entries)
+## [2026-10-08] build | Scaffold, research, ew.py, kb, tests, eval cases
