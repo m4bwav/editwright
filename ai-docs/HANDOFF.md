@@ -13,11 +13,14 @@ Updated 2026-10-08. Read this first, then [log.md](log.md) and [next-session-pro
 ## In progress
 
 - The owner reviews the letter and suggestions and says which IDs they accept and what felt off.
-- Background work started this session: the GitHub wiki (wikiwright run) and a README hero image (pull request with label needs-review). Check their results in log.md.
+- README hero image: a background run was still generating at the end of the session; if no hero-image pull request exists, make one (comfyui-gen skill, banner at assets/banner.jpg like cinewright).
 
 ## Known issue to fix in 0.1.1
 
 - LEARNINGS L-001 `corrections-of-own-words-counted-as-ai`: says to said, road to rode and blanks to planks are counted as AI-written words. Fix `is_correction`/`provenance` in `ew.py` (irregular forms, the author's own word nearby), add tests, rerun the suite.
+
+- GitHub wiki live since 2026-10-08 (https://github.com/m4bwav/editwright/wiki, 10 pages, wiki commit 3dbb6ed); run record in [notes/2026-10-08-wiki-run/](notes/2026-10-08-wiki-run/2026-10-08-github-wiki.md). Update the version-bearing pages it lists at each release.
+- Found by the wiki run, also for 0.1.1: the echo check skips common words, so copied wording can undercount in nonfiction; the apply changelog's Words column calls `--author-text` words AI-written while the last column says author; a refused intake leaves a job folder with only the snapshot; README Privacy omits `--works`, `./.editwright.json` and `EDITWRIGHT_CONFIG`; `kb/delivery.md` calls suggestions.md the source of truth (it is suggestions.json); the v0.1.0 tag's TESTS.md still says 0/0.
 
 ## Next single action
 

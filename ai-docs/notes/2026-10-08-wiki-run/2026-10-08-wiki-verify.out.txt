@@ -1,0 +1,590 @@
+=== installed
+Python 3.14.4
+=== version
+$ python3 ew.py --version
+editwright 0.1.0
+$ echo $?
+0
+=== intake
+$ python3 ew.py --works works intake story.md --work the-salt-road --title "The Salt Road" --author "Test Author" --genre short-story --level full
+job: works/the-salt-road/jobs/20261008-1-full
+source sha256: cdfeb8dcbc53776821db0c623bac936ce182c087ee6980279f3cdf16854f0aff (snapshot source.md, read-only)
+clean.md: 133 words, 9 paragraphs; cleanup rules applied: 2 (cleanup-log.md); word check passed
+mode: human-authored; AI-word limit for short-story: 0 words / 0.0%
+author preferences: works/authors/test-author.md (none yet)
+$ echo $?
+0
+=== cleanup-log
+$ cat works/the-salt-road/jobs/*/cleanup-log.md
+# Cleanup log
+
+Mechanical cleanup from the source snapshot to clean.md. No word was added, removed or changed: the word sequence check passed (133 words).
+
+Source read as: text (utf-8-sig).
+
+| Rule | Changes | Examples |
+|---|---|---|
+| hard-wrapped lines joined inside paragraphs | 3 |  |
+| scene breaks made * * * | 1 |  |
+$ echo $?
+0
+=== show
+$ python3 ew.py --works works show the-salt-road
+[P1] # The Salt Road
+
+[P2] Nell had walked the salt road every morning for nine years. She knew where the ruts ran deep and where the gulls waited for scraps.
+
+[P3] "You're late," said her brother when she reached the gate.
+
+[P4] "The tide was high," Nell said. "I had to go round by the old mill."
+
+[P5] She saw the cart standing empty by the well. Nobody had unloaded teh barrels, and the mule was gone.
+
+[P6] * * *
+
+[P7] By noon the village was talking. Some said the mule had wandered off, as mules do. Others said a stranger had come in the night and taken it.
+
+[P8] Nell walks to the well again and looked at the cart. The axle was cracked. Someone had driven it hard, very hard, and then left it.
+
+[P9] She realized the stranger was her cousin.
+$ echo $?
+0
+=== show-range
+$ python3 ew.py --works works show the-salt-road --para 7-8
+[P7] By noon the village was talking. Some said the mule had wandered off, as mules do. Others said a stranger had come in the night and taken it.
+
+[P8] Nell walks to the well again and looked at the cart. The axle was cracked. Someone had driven it hard, very hard, and then left it.
+$ echo $?
+0
+=== stats
+$ python3 ew.py --works works stats the-salt-road
+words 130, paragraphs 9, sentences 14
+sentence length: mean 9.3, median 10.0, sd 2.6, range 4-14; histogram 1-5:1, 6-10:8, 11-20:5, 21-30:0, 31-40:0, 41+:0
+longest: P2 (14 w) She knew where the ruts ran deep and whe...; P7 (12 w) Others said a stranger had come in the n...; P2 (11 w) Nell had walked the salt road every morn...
+dialogue share: 10.4% of characters
+-ly adverbs: 0.0 per 1000 ()
+filter words: 30.8 per 1000 (knew 1, saw 1, looked 1, realized 1) in P2,5,8,9
+crutch words: very 1, then 1
+close repeats (60-word window): nell x2 P4,8; mule x1 P7; well x1 P8; cart x1 P8; hard x1 P8; stranger x1 P9
+top words: nell 3, cart 2, well 2, mule 2, stranger 2, hard 2, walked 1, salt 1, road 1, every 1, morning 1, nine 1
+was/were + -ing: 1; began/started to: 0; dialogue tags: {'said': 2}; same first word twice running: none
+(counts only; whether any of it is a problem is the editor's call, in context)
+$ echo $?
+0
+=== stats-file
+$ python3 ew.py stats story.md
+words 130, paragraphs 9, sentences 14
+sentence length: mean 9.3, median 10.0, sd 2.6, range 4-14; histogram 1-5:1, 6-10:8, 11-20:5, 21-30:0, 31-40:0, 41+:0
+longest: P2 (14 w) She knew
+where the ruts ran deep and whe...; P7 (12 w) Others said a stranger
+had come in the n...; P2 (11 w) Nell had walked the salt road every morn...
+dialogue share: 10.3% of characters
+-ly adverbs: 0.0 per 1000 ()
+filter words: 30.8 per 1000 (knew 1, saw 1, looked 1, realized 1) in P2,5,8,9
+crutch words: very 1, then 1
+close repeats (60-word window): nell x2 P4,8; mule x1 P7; well x1 P8; cart x1 P8; hard x1 P8; stranger x1 P9
+top words: nell 3, cart 2, well 2, mule 2, stranger 2, hard 2, walked 1, salt 1, road 1, every 1, morning 1, nine 1
+was/were + -ing: 1; began/started to: 0; dialogue tags: {'said': 2}; same first word twice running: none
+(counts only; whether any of it is a problem is the editor's call, in context)
+$ echo $?
+0
+=== suggest-bad
+$ python3 ew.py --works works suggest the-salt-road bad.json
+refused 1 suggestion(s); nothing saved:
+  - quote not found in the text: 'She saw the cart standing empty by the barn.'
+$ echo $?
+1
+=== suggest
+$ python3 ew.py --works works suggest the-salt-road suggestions.json
+added 6 suggestion(s), 6 in total; 1 carry AI-written words (S-004)
+note: human-authored mode with a 0-word limit; apply will refuse these unless the author supplies the words (--author-text) or the job is overridden
+$ echo $?
+0
+=== suggestions-md
+$ cat works/the-salt-road/jobs/*/suggestions.md
+# Suggestions: The Salt Road
+
+Level of edit: full. Genre: short-story. Mode: human-authored. Paragraph numbers (P) match clean.md.
+Nothing here has been applied. Tell the editor which IDs you accept; queries need your own words.
+
+## Developmental (1)
+
+### S-005 · stakes · P9 · severity 3
+> She realized the stranger was her cousin.
+
+- Problem: The reveal has no setup, so it reads as coincidence.
+- Why it matters: Readers accept a surprise they could have seen coming.
+- Option 1: Plant the cousin earlier in the story.
+- Option 2: Move the reveal so the reader learns it with Nell.
+- Query: the fix is yours to write.
+
+## Line (2)
+
+### S-004 · rhythm · P7 · severity 1 · AI words: 3
+> as mules do
+
+- Problem: The aside is flat.
+- Proposed change: {~~as mules do~>the way mules will~~}
+- Words: removed as, do; AI-written: the way will (3)
+
+### S-002 · repetition · P8 · severity 1
+> very hard, 
+
+- Problem: The repeat softens the sentence instead of stressing it.
+- Why it matters: The cracked axle already shows how hard the cart was driven.
+- Option 1: Cut the repeat.
+- Option 2: Keep it if Nell's voice leans on repeats elsewhere.
+- Proposed change: {--very hard, --}
+- Words: a cut, no new words; removed very, hard
+
+## Copy (2)
+
+### S-003 · tense · P8 · severity 2
+> walks
+
+- Problem: Tense slip: the story is told in the past tense.
+- Proposed change: {~~walks~>walked~~}
+- Words: corrected walks>walked
+
+### S-006 · punctuation · P8 · severity 2
+> hard, very
+
+- Problem: A full stop would give the repeat its own beat.
+- Proposed change: {~~hard, very~>hard. Very~~}
+- Words: punctuation only, no new words
+
+## Proof (1)
+
+### S-001 · typo · P5 · severity 2
+> teh
+
+- Problem: Typo.
+- Proposed change: {~~teh~>the~~}
+- Words: corrected teh>the
+$ echo $?
+0
+=== review-md
+$ cat works/the-salt-road/jobs/*/review.md
+# The Salt Road
+
+Nell had walked the salt road every morning for nine years. She knew where the ruts ran deep and where the gulls waited for scraps.
+
+"You're late," said her brother when she reached the gate.
+
+"The tide was high," Nell said. "I had to go round by the old mill."
+
+She saw the cart standing empty by the well. Nobody had unloaded {~~teh~>the~~}{>>S-001<<} barrels, and the mule was gone.
+
+* * *
+
+By noon the village was talking. Some said the mule had wandered off, {~~as mules do~>the way mules will~~}{>>S-004<<}. Others said a stranger had come in the night and taken it.
+
+Nell {~~walks~>walked~~}{>>S-003<<} to the well again and looked at the cart. The axle was cracked. Someone had driven it {~~hard, very~>hard. Very~~}{>>S-006<<} hard, and then left it.
+
+{==She realized the stranger was her cousin.==}{>>S-005: The reveal has no setup, so it reads as coincidence.<<}
+$ echo $?
+0
+=== ledger-md
+$ cat works/the-salt-road/jobs/*/provenance-ledger.md
+# Provenance ledger: The Salt Road
+
+Counts the words each proposed change would bring in that the author did not write. Reused words, cuts, reorders, punctuation and spelling or inflection corrections of the author's own words count as the author's. Words the author typed (`--author-text`) count as the author's.
+
+- Piece: 133 words. Mode: human-authored. Limit: 0 words or 0.0%, whichever is lower.
+- If every proposed change were applied: 3 AI-written words (2.26%).
+- Applied so far: 0 AI-written words (0.00%) from 0 change(s).
+
+| ID | Kind | AI-written words | Corrected | Removed | Applied |
+|---|---|---|---|---|---|
+| S-004 | new-words | 3 (the way will) |  | 2 |  |
+| S-002 | cut | 0  |  | 2 |  |
+| S-003 | correction | 0  | walks>walked | 0 |  |
+| S-006 | punctuation | 0  |  | 0 |  |
+| S-001 | correction | 0  | teh>the | 0 |  |
+$ echo $?
+0
+=== ledger
+$ python3 ew.py --works works ledger the-salt-road
+piece 133 words; all proposed changes: 3 AI-written words (2.26%); applied: 0 (0.00%)
+ledger: /tmp/demo/works/the-salt-road/jobs/20261008-1-full/provenance-ledger.md
+$ echo $?
+0
+=== ledger-accept-ok
+$ python3 ew.py --works works ledger the-salt-road --accept S-001,S-003
+accepting S-001, S-003 would bring in 0 AI-written words (0.00%): within the limit (0 words / 0.0%)
+$ echo $?
+0
+=== ledger-accept-over
+$ python3 ew.py --works works ledger the-salt-road --accept S-004
+accepting S-004 would bring in 3 AI-written words (2.26%): over the limit (0 words / 0.0% for short-story in human-authored mode)
+$ echo $?
+1
+=== apply-none
+$ python3 ew.py --works works apply the-salt-road
+editwright: name the accepted IDs with --accept (the author's choice; there is no 'all')
+$ echo $?
+2
+=== apply-unknown
+$ python3 ew.py --works works apply the-salt-road --accept S-009
+refused: S-009 not in suggestions.json; nothing applied
+$ echo $?
+1
+=== apply-query
+$ python3 ew.py --works works apply the-salt-road --accept S-005
+refused; nothing applied:
+  - S-005 is a query with no proposed change; the author supplies the words (--author-text S-005="...")
+$ echo $?
+1
+=== apply-overlap
+$ python3 ew.py --works works apply the-salt-road --accept S-002,S-006
+refused: S-006 and S-002 change overlapping text; accept one of them
+$ echo $?
+1
+=== apply-ai
+$ python3 ew.py --works works apply the-salt-road --accept S-004
+refused: these changes bring in 3 AI-written words (2.26%), over the limit (0 words / 0.0% for short-story in human-authored mode). Carrying AI words: S-004. Ask the author to write those words (--author-text) or to drop them; nothing applied.
+$ echo $?
+1
+=== apply-echo
+$ python3 ew.py --works works apply the-salt-road --accept S-004 --author-text S-004="the way mules will"
+refused: these changes bring in 1 AI-written words (0.75%), over the limit (0 words / 0.0% for short-story in human-authored mode). Carrying AI words: S-004. Ask the author to write those words (--author-text) or to drop them; nothing applied.
+$ echo $?
+1
+=== apply
+$ python3 ew.py --works works apply the-salt-road --accept S-001,S-002,S-003,S-005 --author-text S-005="She knew then that the stranger was her cousin."
+applied 4 change(s) to a copy: /tmp/demo/works/the-salt-road/jobs/20261008-1-full/edited.md (changelog edited-changelog.md)
+AI-written words in this file: 0 (0.00%); within the limit (0 words / 0.0%)
+the source was not touched; run `ew.py check` to confirm
+$ echo $?
+0
+=== edited-md
+$ cat works/the-salt-road/jobs/*/edited.md
+# The Salt Road
+
+Nell had walked the salt road every morning for nine years. She knew where the ruts ran deep and where the gulls waited for scraps.
+
+"You're late," said her brother when she reached the gate.
+
+"The tide was high," Nell said. "I had to go round by the old mill."
+
+She saw the cart standing empty by the well. Nobody had unloaded the barrels, and the mule was gone.
+
+* * *
+
+By noon the village was talking. Some said the mule had wandered off, as mules do. Others said a stranger had come in the night and taken it.
+
+Nell walked to the well again and looked at the cart. The axle was cracked. Someone had driven it hard, and then left it.
+
+She knew then that the stranger was her cousin.
+$ echo $?
+0
+=== changelog-md
+$ cat works/the-salt-road/jobs/*/edited-changelog.md
+# Changelog: edited.md
+
+From clean.md (sha256 4e90b819b5cbdf42). Only the IDs the author accepted were applied. AI-written words: within the limit (0 words / 0.0%).
+
+| ID | Para | Before | After | Words | Who wrote the new words |
+|---|---|---|---|---|---|
+| S-001 | P5 | teh | the | corrected teh>the | nobody: author's own words |
+| S-003 | P8 | walks | walked | corrected walks>walked | nobody: author's own words |
+| S-002 | P8 | very hard,  | (cut) | a cut, no new words; removed very, hard | nobody: author's own words |
+| S-005 | P9 | She realized the stranger was her cousin. | She knew then that the stranger was her cousin. | removed realized; AI-written: knew then that (3) | author |
+$ echo $?
+0
+=== ledger-after
+$ python3 ew.py --works works ledger the-salt-road
+piece 133 words; all proposed changes: 3 AI-written words (2.26%); applied: 0 (0.00%)
+ledger: /tmp/demo/works/the-salt-road/jobs/20261008-1-full/provenance-ledger.md
+$ echo $?
+0
+=== export
+$ python3 ew.py --works works export the-salt-road
+wrote /tmp/demo/works/the-salt-road/jobs/20261008-1-full/review.docx: 4 tracked suggestion(s) and 5 comment(s) on a copy of clean.md
+left out (they overlap an earlier change; they are in suggestions.md): S-002
+open it in Word, or upload it to Google Drive and open with Google Docs; accepting there is the author's act
+$ echo $?
+0
+=== docx-parts
+$ python3 -c "import zipfile, glob; print('\n'.join(zipfile.ZipFile(glob.glob('works/the-salt-road/jobs/*/review.docx')[0]).namelist()))"
+[Content_Types].xml
+_rels/.rels
+word/_rels/document.xml.rels
+word/document.xml
+word/styles.xml
+word/comments.xml
+$ echo $?
+0
+=== docx-marks
+$ python3 -c "import zipfile, glob, re; x = zipfile.ZipFile(glob.glob('works/the-salt-road/jobs/*/review.docx')[0]).read('word/document.xml').decode(); print(len(re.findall('<w:ins ', x)), 'insertions,', len(re.findall('<w:del ', x)), 'deletions')"
+4 insertions, 4 deletions
+$ echo $?
+0
+=== feedback
+$ python3 ew.py --works works feedback the-salt-road --accepted S-001,S-002,S-003,S-005 --rejected S-004,S-006 --note "Liked the cuts; leave the asides alone."
+recorded 4 accepted, 2 rejected; preferences: works/authors/test-author.json
+by category: typo 1/1 taken; repetition 1/1 taken; tense 1/1 taken; stakes 1/1 taken; rhythm 0/1 taken; punctuation 0/1 taken
+$ echo $?
+0
+=== author
+$ python3 ew.py --works works author "Test Author"
+by category: typo 1/1 taken; repetition 1/1 taken; tense 1/1 taken; stakes 1/1 taken; rhythm 0/1 taken; punctuation 0/1 taken
+# Author preferences: Test Author
+
+Read before every pass. Tallies in test-author.json; taste notes below, one line each with the date and the job.
+
+## Takes
+
+## Turns down
+
+## Notes
+$ echo $?
+0
+=== override-short
+$ python3 ew.py --works works override the-salt-road --reason "go ahead"
+editwright: --reason must quote what the user said (for example "rewrite it freely")
+$ echo $?
+2
+=== override
+$ python3 ew.py --works works override the-salt-road --reason "rewrite it freely, this one is a practice piece"
+human-authored mode is off for this job only; recorded in notes.md. The ledger still counts AI-written words.
+$ echo $?
+0
+=== apply-overridden
+$ python3 ew.py --works works apply the-salt-road --accept S-004
+applied 1 change(s) to a copy: /tmp/demo/works/the-salt-road/jobs/20261008-1-full/edited-2.md (changelog edited-2-changelog.md)
+AI-written words in this file: 3 (2.26%); allowed (human-authored mode overridden for this job: rewrite it freely, this one is a practice piece)
+the source was not touched; run `ew.py check` to confirm
+$ echo $?
+0
+=== override-off
+$ python3 ew.py --works works override the-salt-road --off
+human-authored mode back on for this job
+$ echo $?
+0
+=== status
+$ python3 ew.py --works works status the-salt-road
+job 20261008-1-full: The Salt Road (short-story, full), 133 words, mode human-authored
+suggestions: 6 (developmental 1, line 2, copy 2, proof 1); applied 1; rejected 2
+files: clean.md, cleanup-log.md, suggestions.json, suggestions.md, review.md, provenance-ledger.md, edited.md
+folder: /tmp/demo/works/the-salt-road/jobs/20261008-1-full
+$ echo $?
+0
+=== render
+$ python3 ew.py --works works render the-salt-road
+wrote suggestions.md, review.md, provenance-ledger.md and provenance.json in /tmp/demo/works/the-salt-road/jobs/20261008-1-full
+$ echo $?
+0
+=== chunk
+$ python3 ew.py --works works chunk the-salt-road --max-words 60 --min-words 20
+3 chunks in /tmp/demo/works/the-salt-road/jobs/20261008-1-full/chunks (max 60 words each); index chunks/INDEX.md
+$ echo $?
+0
+=== chunk-index
+$ cat works/the-salt-road/jobs/*/chunks/INDEX.md
+# Chunks
+
+Each chunk holds whole paragraphs; paragraph numbers match clean.md. Summarise each chunk into the story bible before moving on.
+
+| Chunk | Paragraphs | Words | First line |
+|---|---|---|---|
+| [001](001.md) | P1-P4 | 53 | # The Salt Road |
+| [002](002.md) | P5-P7 | 47 | She saw the cart standing empty by the well. Nobody had unlo |
+| [003](003.md) | P8-P9 | 33 | Nell walks to the well again and looked at the cart. The axl |
+$ echo $?
+0
+=== check
+$ python3 ew.py --works works check the-salt-road
+OK   source /tmp/demo/story.md: unchanged
+OK   snapshot source.md: matches
+OK   clean.md: same words as the source
+check: PASSED
+$ echo $?
+0
+=== check-against
+$ sed 's/$/\r/' story.md > export.txt && python3 ew.py --works works check the-salt-road --against export.txt
+OK   source /tmp/demo/story.md: unchanged
+OK   snapshot source.md: matches
+OK   export.txt: same words as the snapshot (bytes differ)
+OK   clean.md: same words as the source
+check: PASSED
+$ echo $?
+0
+=== check-changed
+$ echo 'A new last line.' >> story.md && python3 ew.py --works works check the-salt-road
+FAIL source /tmp/demo/story.md: CHANGED (sha256 0d05478ee6a09c74d51e7303a73fac1eb1efcd402b8d0f86f990f5f4088d3ffb)
+OK   snapshot source.md: matches
+OK   clean.md: same words as the source
+check: FAILED: the author's source changed; the run fails
+$ echo $?
+1
+=== apply-docx
+$ python3 ew.py --works works apply the-salt-road --accept S-001 --docx && ls works/the-salt-road/jobs/*/ | grep edited-3
+applied 1 change(s) to a copy: /tmp/demo/works/the-salt-road/jobs/20261008-1-full/edited-3.md (changelog edited-3-changelog.md)
+AI-written words in this file: 0 (0.00%); within the limit (0 words / 0.0%)
+the source was not touched; run `ew.py check` to confirm
+edited-3-changelog.md
+edited-3.docx
+edited-3.md
+$ echo $?
+0
+=== intake-essay
+$ python3 ew.py --works works intake essay.md --genre nonfiction --level line
+job: works/essay/jobs/20261008-1-line
+source sha256: 94a1ba7cb03ab989693df0ba473c862e33a66e2bb41d05dbd839d8def3d1276e (snapshot source.md, read-only)
+clean.md: 136 words, 4 paragraphs; cleanup rules applied: 0 (cleanup-log.md); word check passed
+mode: human-authored; AI-word limit for nonfiction: 50 words / 1.0%
+$ echo $?
+0
+=== essay-suggest
+$ python3 ew.py --works works suggest essay essay-suggestions.json
+added 2 suggestion(s), 2 in total; 2 carry AI-written words (S-001, S-002)
+$ echo $?
+0
+=== essay-ledger-1
+$ python3 ew.py --works works ledger essay --accept S-001
+accepting S-001 would bring in 1 AI-written words (0.74%): within the limit (50 words / 1.0%)
+$ echo $?
+0
+=== essay-ledger-2
+$ python3 ew.py --works works ledger essay --accept S-001,S-002
+accepting S-001, S-002 would bring in 6 AI-written words (4.41%): over the limit (50 words / 1.0% for nonfiction in human-authored mode)
+$ echo $?
+1
+=== intake-pdf
+$ touch book.pdf && python3 ew.py --works works intake book.pdf
+editwright: cannot read .pdf files directly; extract the text first (readwright: rw.py read FILE --out text.md) and pass it with --text
+$ echo $?
+1
+=== intake-text
+$ touch essay.pdf && cp essay.md extracted.md && python3 ew.py --works works intake essay.pdf --text extracted.md --work essay-pdf --genre nonfiction
+job: works/essay-pdf/jobs/20261008-1-full
+source sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 (snapshot source.pdf, read-only)
+clean.md: 136 words, 4 paragraphs; cleanup rules applied: 0 (cleanup-log.md); word check passed
+mode: human-authored; AI-word limit for nonfiction: 50 words / 1.0%
+$ echo $?
+0
+=== provenance
+$ python3 -c "import ew; print(ew.provenance('do not', 'don’t')); print(ew.provenance('hat', 'hot')); print(ew.provenance('the dog barked', 'the dog growled'))"
+{'reused': 0, 'corrected': [], 'removed': ['do', 'not'], 'new_words': ["don't"], 'new_word_count': 1, 'kind': 'new-words'}
+{'reused': 0, 'corrected': ['hat>hot'], 'removed': [], 'new_words': [], 'new_word_count': 0, 'kind': 'correction'}
+{'reused': 2, 'corrected': [], 'removed': ['barked'], 'new_words': ['growled'], 'new_word_count': 1, 'kind': 'new-words'}
+$ echo $?
+0
+=== no-job
+$ python3 ew.py --works works show no-such-work
+editwright: no job found for 'no-such-work' (looked in no-such-work, works/no-such-work)
+$ echo $?
+1
+=== env-works
+$ EDITWRIGHT_WORKS=works python3 ew.py author "Test Author" | head -1
+by category: typo 1/1 taken; repetition 1/1 taken; tense 1/1 taken; stakes 1/1 taken; rhythm 0/1 taken; punctuation 0/1 taken
+$ echo $?
+0
+=== config-works
+$ mkdir -p cfg && cd cfg && echo '{"works": "../works"}' > .editwright.json && python3 ../ew.py author "Test Author" | head -1
+by category: typo 1/1 taken; repetition 1/1 taken; tense 1/1 taken; stakes 1/1 taken; rhythm 0/1 taken; punctuation 0/1 taken
+$ echo $?
+0
+=== default-works
+$ python3 ew.py author "Test Author"
+no preferences yet for Test Author (/tmp/demo/home/editwright-works/authors)
+$ echo $?
+0
+=== store
+$ find works | sort
+works
+works/authors
+works/authors/test-author.json
+works/authors/test-author.md
+works/book
+works/book/jobs
+works/book/jobs/20261008-1-full
+works/book/jobs/20261008-1-full/source.pdf
+works/essay
+works/essay-pdf
+works/essay-pdf/jobs
+works/essay-pdf/jobs/20261008-1-full
+works/essay-pdf/jobs/20261008-1-full/clean.md
+works/essay-pdf/jobs/20261008-1-full/cleanup-log.md
+works/essay-pdf/jobs/20261008-1-full/job.json
+works/essay-pdf/jobs/20261008-1-full/notes.md
+works/essay-pdf/jobs/20261008-1-full/source-text.md
+works/essay-pdf/jobs/20261008-1-full/source.pdf
+works/essay-pdf/story-bible.md
+works/essay-pdf/style-sheet.md
+works/essay-pdf/work.json
+works/essay/jobs
+works/essay/jobs/20261008-1-line
+works/essay/jobs/20261008-1-line/clean.md
+works/essay/jobs/20261008-1-line/cleanup-log.md
+works/essay/jobs/20261008-1-line/job.json
+works/essay/jobs/20261008-1-line/notes.md
+works/essay/jobs/20261008-1-line/provenance-ledger.md
+works/essay/jobs/20261008-1-line/provenance.json
+works/essay/jobs/20261008-1-line/review.md
+works/essay/jobs/20261008-1-line/source-text.md
+works/essay/jobs/20261008-1-line/source.md
+works/essay/jobs/20261008-1-line/suggestions.json
+works/essay/jobs/20261008-1-line/suggestions.md
+works/essay/story-bible.md
+works/essay/style-sheet.md
+works/essay/work.json
+works/last-check.txt
+works/the-salt-road
+works/the-salt-road/jobs
+works/the-salt-road/jobs/20261008-1-full
+works/the-salt-road/jobs/20261008-1-full/chunks
+works/the-salt-road/jobs/20261008-1-full/chunks/001.md
+works/the-salt-road/jobs/20261008-1-full/chunks/002.md
+works/the-salt-road/jobs/20261008-1-full/chunks/003.md
+works/the-salt-road/jobs/20261008-1-full/chunks/INDEX.md
+works/the-salt-road/jobs/20261008-1-full/clean.md
+works/the-salt-road/jobs/20261008-1-full/cleanup-log.md
+works/the-salt-road/jobs/20261008-1-full/edited-2-changelog.md
+works/the-salt-road/jobs/20261008-1-full/edited-2.md
+works/the-salt-road/jobs/20261008-1-full/edited-3-changelog.md
+works/the-salt-road/jobs/20261008-1-full/edited-3.docx
+works/the-salt-road/jobs/20261008-1-full/edited-3.md
+works/the-salt-road/jobs/20261008-1-full/edited-changelog.md
+works/the-salt-road/jobs/20261008-1-full/edited.md
+works/the-salt-road/jobs/20261008-1-full/job.json
+works/the-salt-road/jobs/20261008-1-full/notes.md
+works/the-salt-road/jobs/20261008-1-full/provenance-ledger.md
+works/the-salt-road/jobs/20261008-1-full/provenance.json
+works/the-salt-road/jobs/20261008-1-full/review.docx
+works/the-salt-road/jobs/20261008-1-full/review.md
+works/the-salt-road/jobs/20261008-1-full/source-text.md
+works/the-salt-road/jobs/20261008-1-full/source.md
+works/the-salt-road/jobs/20261008-1-full/stats.json
+works/the-salt-road/jobs/20261008-1-full/suggestions.json
+works/the-salt-road/jobs/20261008-1-full/suggestions.md
+works/the-salt-road/story-bible.md
+works/the-salt-road/style-sheet.md
+works/the-salt-road/work.json
+$ echo $?
+0
+=== repo-tests
+$ python3 tests/test_ew.py
+..........................
+----------------------------------------------------------------------
+Ran 26 tests in 0.128s
+
+OK
+$ echo $?
+0
+=== repo-budget
+$ python3 scripts/budget.py
+description characters (always loaded; harness cuts at 1,536)       979  green<=1100  yellow<=1400  green  
+SKILL.md tokens (loaded on every use)                              2050  green<=2500  yellow<=3500  green  
+largest kb or reference file tokens (loaded on demand)             1253  green<=1500  yellow<=2000  green  fiction.md
+installed skill folder KB                                           157  green<=300   yellow<=600   green  
+tracked repository KB                                               382  green<=1024  yellow<=3072  green  
+budget: GREEN
+$ echo $?
+0
+=== repo-package
+$ python3 scripts/package.py
+wrote <checkout>/dist/editwright.zip: 21 files, 65 KB
+$ echo $?
+0
