@@ -15,9 +15,9 @@ Updated 2026-10-08. Read this first, then [log.md](log.md) and [next-session-pro
 - The owner reviews the letter and suggestions and says which IDs they accept and what felt off.
 - README hero image: a background run was still generating at the end of the session; if no hero-image pull request exists, make one (comfyui-gen skill, banner at assets/banner.jpg like cinewright).
 
-## 0.1.1 (pull request open, waiting for review)
+## 0.1.1 (pull request #2, waiting for review)
 
-- Fixes LEARNINGS L-001 `corrections-of-own-words-counted-as-ai` (irregular forms, commonly confused words, the author's own word nearby; on the owner's story the ledger went from 3 false AI words to 0) and the wiki run's findings (echo check counts copied runs, changelog wording for author text, a refused intake writes nothing, README Privacy lookup order, kb/delivery source of truth). Tests 30/30.
+- Fixes LEARNINGS L-001 `corrections-of-own-words-counted-as-ai` (irregular forms, commonly confused words, the author's own word nearby; on the owner's story the ledger went from 3 false AI words to 0) and the wiki run's findings (echo check counts copied runs, changelog wording for author text, a refused intake writes nothing, README Privacy lookup order, kb/delivery source of truth). Tests 31/31, evals 9/9 (T-20261008-5); also L-002 (suggest keeps valid items; eval cases need 30 turns in prompt.md frontmatter).
 - After merge: tag v0.1.1, release with `editwright.zip`, `claude plugin marketplace update mark-local` and reinstall, update the wiki's version-bearing pages (list in [notes/2026-10-08-wiki-run/](notes/2026-10-08-wiki-run/2026-10-08-github-wiki.md)).
 - wikiwright lessons from the wiki run: m4bwav/wikiwright PR #9 (L-153, L-154).
 
