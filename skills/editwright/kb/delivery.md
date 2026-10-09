@@ -12,7 +12,7 @@ Source: [delivery formats note](../../../ai-docs/research/2026-10-08-delivery-fo
 Never write to the author's original document. Every output is a copy or a file beside it. Suggestions live beside the text until the author acts (the Word Copilot and Docs Proofread pattern).
 
 ## Default outputs (stdlib, no install)
-1. `suggestions.md`: the source of truth. One entry per suggestion: id, location (chapter, paragraph, quoted context), original, proposed (if a replacement), reason, category, confidence. The author accepts by id; `ew.py apply` acts only on accepted ids.
+1. `suggestions.md`: the readable view of `suggestions.json`, which is the source of truth (`ew.py suggest` writes both). One entry per suggestion: id, location (paragraph and quoted text), proposed change if any, problem, why, options, category, severity. The author accepts by id; `ew.py apply` acts only on accepted ids.
 2. `review.md`: CriticMarkup copy of the text (fletcher.github.io/MultiMarkdown-6/syntax/critic.html):
    - insertion `{++text++}`, deletion `{--text--}`, substitution `{~~old~>new~~}`
    - comment on a span: `{==span==}{>>reason<<}`

@@ -8,6 +8,19 @@ Entry shape: `### T-YYYYMMDD-n · date · harness · env · passed/total`, then 
 
 ## Runs
 
+### T-20261008-5 · 2026-10-08 · claude plugin eval 2.1.281 (default model), --ablation none · Windows 11 native + WSL2 Ubuntu · 9/9
+- After C-20261008-4 (30 turns in prompt.md frontmatter) and the clarified outcome-1 criterion: action-1, action-2, action-3 3 of 3 each at 1.00 (7 to 11 turns); outcome-1 3 of 3 (judge PASS PASS PASS each); trigger-1 to trigger-3 3 of 3; decoy-1 and decoy-2 0 of 3. About $6.
+- The no-skill baseline was measured in T-20261008-3 (action and outcome cases 0.29, 0.75, 0.00, 0.67) and not rerun.
+- Unit tests 31/31.
+- led to: none
+
+### T-20261008-4 · 2026-10-08 · claude plugin eval 2.1.281, --ablation none then with-without · WSL2 Ubuntu (Bash cases) · 2/4
+- action-1 · action · harness · two of three runs ended with no suggestions.json, ledger or check: one quote refused made `suggest` save nothing, and the 10-turn default ran out before a resubmit (L-002).
+- outcome-1 · outcome · harness · one run hit the 10-turn cap before its reply; in the rerun two runs failed the judge for showing a cut's resulting sentence, which uses only the author's words (criterion was ambiguous).
+- action-2 · action · no-op · one run declined S-004 from the ledger without calling apply (outcome still right).
+- `max_turns` in case.yaml was ignored (maxTurns stayed 10); the field belongs in prompt.md frontmatter.
+- led to: L-002, C-20261008-4
+
 ### T-20261008-3 · 2026-10-08 · claude plugin eval 2.1.281 (default model), --ablation with-without · WSL2 Ubuntu (Bash cases) · 4/4
 - action-1 with 1.00, without 0.29; action-2 with 0.92, without 0.75; action-3 with 1.00, without 0.00; outcome-1 with 1.00, without 0.67. Mean delta +0.55, $5.10, 229 s.
 - action-2: one of three runs never called `ew.py apply` (it read the ledger and declined S-004 itself). No edited file was written and the source was unchanged, so the outcome held; the grader for the apply call failed that run.

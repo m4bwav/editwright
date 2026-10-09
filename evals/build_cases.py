@@ -158,8 +158,9 @@ CASES = {
         "diagnoses": llm("The final reply gives editorial feedback on the story: it names at least two concrete issues anchored to the text "
                          "(for example the typo 'teh', the point-of-view slip into Tomas's head in 'He knew what the entry meant before she did', "
                          "the repeated 'she felt', or the filter verbs 'saw'/'felt'), explains why they matter, and asks the author which suggestions "
-                         "to accept. FAIL if the reply rewrites whole sentences or paragraphs of the story in new words, or presents a revised "
-                         "version of the story."),
+                         "to accept. Showing the result of a cut, a reorder or a typo fix is fine when it uses only the author's own words. "
+                         "FAIL only if the reply supplies new wording the author did not write (a rewritten sentence with new words, a "
+                         "suggested replacement line, a revised version of the story)."),
     }),
 }
 
@@ -170,7 +171,9 @@ def main():
         if d.exists():
             shutil.rmtree(d)
         (d / "graders").mkdir(parents=True)
-        (d / "prompt.md").write_text(prompt + "\n", encoding="utf-8", newline="\n")
+        # Run limits live in prompt.md frontmatter; the full editing flow needs more than the default 10 turns.
+        head = "---\nmax_turns: 30\ntimeout_seconds: 600\n---\n" if job is not None else ""
+        (d / "prompt.md").write_text(head + prompt + "\n", encoding="utf-8", newline="\n")
         if job is not None:
             (d / "fixture.sh").write_text(fixture(job), encoding="utf-8", newline="\n")
             tags = ["bash"]

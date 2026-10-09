@@ -117,6 +117,23 @@ class TestProvenance(unittest.TestCase):
         p = ew.provenance("He went", "He sprinted away")
         self.assertEqual((p["kind"], p["new_word_count"]), ("new-words", 2))
 
+    def test_irregular_forms_and_the_authors_word_nearby(self):
+        # LEARNINGS L-001 corrections-of-own-words-counted-as-ai
+        self.assertEqual(ew.provenance("Jane pauses and then says", "Jane paused and then said")["new_word_count"], 0)
+        self.assertEqual(ew.provenance("They road on", "They rode on")["new_word_count"], 0)
+        self.assertEqual(ew.provenance("are initializing", "were initializing")["new_word_count"], 0)
+        nearby = {"planks", "bridge"}
+        self.assertEqual(ew.provenance("light weight blanks", "light weight planks", nearby)["new_word_count"], 0)
+        self.assertEqual(ew.provenance("light weight blanks", "light weight planks")["new_word_count"], 1)
+        # a pure addition of a nearby word is still new: nothing was replaced
+        self.assertEqual(ew.provenance("the bridge", "the long bridge", {"long"})["new_word_count"], 1)
+
+    def test_echo_counts_copied_runs_of_common_words(self):
+        s = {"quote": "He went home.", "options": ["something like: the way mules will go"]}
+        self.assertEqual(ew.echoed_words(s, "He went home the way mules will."), ["the", "way", "mules", "will"])
+        s = {"quote": "He went home.", "options": ["Use the past tense."]}
+        self.assertEqual(ew.echoed_words(s, "He went to the shop."), [])
+
     def test_correction_needs_a_close_word(self):
         self.assertTrue(ew.is_correction("received", "recieved"))
         self.assertTrue(ew.is_correction("opened", "open"))
@@ -158,7 +175,20 @@ class TestJob(Base):
         code, out = self.suggest([{"level": "line", "category": "x", "para": 2, "quote": "not in text", "problem": "p"}])
         self.assertEqual(code, 1)
         self.assertIn("quote not found", out)
-        self.assertFalse((self.job / "suggestions.json").exists())
+        data = json.loads((self.job / "suggestions.json").read_text(encoding="utf-8"))
+        self.assertEqual(data["suggestions"], [])
+
+    def test_suggest_saves_valid_items_and_resubmit_adds_only_fixed_ones(self):
+        self.intake()
+        bad = dict(SUGGESTIONS[1], quote="Mara saw the door opened")
+        code, out = self.suggest([SUGGESTIONS[0], bad])
+        self.assertEqual(code, 1)
+        self.assertIn("item 2", out)
+        code, out = self.suggest([SUGGESTIONS[0], SUGGESTIONS[1]])
+        self.assertEqual(code, 0, out)
+        self.assertIn("skipped 1", out)
+        data = json.loads((self.job / "suggestions.json").read_text(encoding="utf-8"))
+        self.assertEqual(len(data["suggestions"]), 2)
 
     def test_suggest_marks_ai_words(self):
         self.intake()
@@ -228,6 +258,22 @@ class TestJob(Base):
         self.assertIn("over the limit", out)
         code, out = self.ew("apply", "story", "--accept", "S-006", "--author-text", "S-006=She marched to the door.")
         self.assertEqual(code, 0, out)
+
+    def test_changelog_names_author_words_as_the_authors(self):
+        self.intake()
+        self.suggest()
+        self.ew("apply", "story", "--accept", "S-004", "--author-text", "S-004=She knew him then: her brother.")
+        log = (self.job / "edited-changelog.md").read_text(encoding="utf-8")
+        row = [ln for ln in log.splitlines() if ln.startswith("| S-004")][0]
+        self.assertIn("the author wrote", row)
+        self.assertNotIn("AI-written", row)
+
+    def test_refused_intake_leaves_nothing(self):
+        pdf = self.tmp / "story.pdf"
+        pdf.write_bytes(b"%PDF-1.4 not really")
+        code, out = self.ew("intake", str(pdf), "--work", "pdfstory")
+        self.assertNotEqual(code, 0)
+        self.assertFalse((Path(self.works) / "pdfstory").exists())
 
     def test_query_without_author_text_refused(self):
         self.intake()

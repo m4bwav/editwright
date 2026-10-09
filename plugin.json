@@ -1,6 +1,6 @@
 {
   "name": "editwright",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Edit writing like a professional editor without rewriting the author: editorial letters, developmental notes, line, copy and proofreading suggestions with IDs and quoted anchors, script coverage and nonfiction fact-check flags. The author's file is never modified, a provenance ledger counts every AI-written word, and only the suggestions the author accepts are applied, to a copy. Standard-library Python CLI for intake, word-safe cleanup, counts, apply and a tracked-changes .docx. Evergreen.",
   "author": "Mark Rogers",
   "license": "MIT",

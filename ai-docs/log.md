@@ -11,3 +11,4 @@ Append-only. One line per operation: `## [YYYY-MM-DD] op | title` where op is on
 ## [2026-10-08] release | v0.1.0 released and installed; evals 9/9; first real pass on the owner's story, waiting for reactions; L-001 found
 ## [2026-10-08] index | rebuilt (4 entries)
 ## [2026-10-08] update | GitHub wiki live (10 pages, verified against v0.1.0); six 0.1.0 issues listed for 0.1.1
+## [2026-10-08] build | 0.1.1: L-001 counting fix, wiki-run findings, suggest keeps valid items (L-002); evals 9/9
