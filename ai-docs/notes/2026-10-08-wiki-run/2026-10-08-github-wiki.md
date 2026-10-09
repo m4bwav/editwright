@@ -62,4 +62,12 @@ Not tested: the Claude Code and Copilot plugin installs, the claude.ai upload, P
 - `wikiwright.py outputs` reads a block after "The config file is JSON:" as output; phrase input lead-ins without a colon.
 - The Write tool stripped trailing spaces from the story text, so the "trailing spaces removed" rule does not show in the cleanup log example.
 
+## 0.1.1 update (2026-10-09)
+
+Wiki commit `e9b7a76` (fast-forward from `3dbb6ed`). The verify script ran unchanged in WSL against a scratch clone of tag v0.1.1 (its docstring still says 0.1.0); output in [2026-10-09-wiki-verify.out.txt](2026-10-09-wiki-verify.out.txt). Job paths on every page moved to `20261009-1-...`. Inaccuracies 1 to 6 above are fixed in 0.1.1 (echo now counts 3 words, changelog says "the author wrote N new word(s)", no `works/book` leftover, README names all five lookups, kb/delivery names suggestions.json, TESTS.md records 9/9). Tests 31, zip 21 files and 70 KB, budget 2066 / 170 / 551. `outputs` 71 checked, 0 missing, 5 skipped; `check --version 0.1.1` 0 errors; `live` 10 pages, 0 failures, 24 anchors, 0 broken; everwrite 0 strong. Evals not rerun.
+
+New in 0.1.1, documented on Suggestion-Format and FAQ: two suggest faults (resubmit duplicates items without `para`; notes differing only in `problem` collapse), issue #4, LEARNINGS L-003 `suggest-dedupe-key-before-validation`. Design note: the nearby-word rule credits any swap to a content word in a neighbouring paragraph, even one that changes the meaning (cart to wagon with "wagon" nearby counts 0 AI words); the ledger labels it "(the author's word nearby)".
+
+wikiwright lesson: `diffout` splits on `## ` headings inside output, not on `=== label` case markers (m4bwav/wikiwright issue #10).
+
 Related: see also [../HANDOFF.md](../HANDOFF.md), [../log.md](../log.md).

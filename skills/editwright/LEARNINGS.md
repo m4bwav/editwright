@@ -6,6 +6,14 @@ Write an entry the moment a real signal happens: a user correction, the same err
 
 ## Active
 
+### L-003 · 2026-10-09 · suggest-dedupe-key-before-validation: resubmits duplicate items without para and drop distinct notes
+- Trigger: wiki update to 0.1.1, 2026-10-09, scratch job: the same file run twice saved two items without `para` twice; two developmental notes on the whole piece with different `problem` text collapsed to one ("skipped 1 already in suggestions.json").
+- Hypothesis: the skip key in cmd_suggest is built from the incoming item before validate_suggestion fills in `para`, and it leaves out `problem`.
+- Rule: build the key after validation and include `problem`; skip the write when nothing was added. Until fixed, resubmit with `--replace-all` and give every note a `para`.
+- Evidence: issue #4 (m4bwav/editwright), ai-docs/notes/2026-10-08-wiki-run/2026-10-08-github-wiki.md (0.1.1 update)
+- Scope: skill
+- Status: active · helpful 0 · harmful 0 · last_confirmed 2026-10-09
+
 ### L-002 · 2026-10-08 · suggest-refusal-costs-the-run: one bad quote plus the 10-turn eval default ended runs with nothing saved
 - Trigger: 0.1.1 eval run, 2026-10-08: in two of three action-1 runs `ew.py suggest` refused the whole file over one quote that did not match clean.md, and the run hit the harness default of 10 turns before resubmitting, so no suggestions.json, ledger or check existed. An outcome-1 run was cut off at the limit before its reply.
 - Hypothesis: the editing flow (skill, intake, show, stats, write JSON, suggest, check, reply) needs 8 to 12 turns; an all-or-nothing refusal adds two more.
@@ -20,4 +28,4 @@ Write an entry the moment a real signal happens: a user correction, the same err
 - Rule: count a replacement word as the author's when it is a known inflection of the removed word (irregular forms included) or when the same word appears in the author's text of the same or next paragraph; keep everything else strict.
 - Evidence: job ledger of 2026-10-08 (private works store), T-20261008-3, fixed by C-20261008-2 (ledger 3 to 0 on the same job)
 - Scope: skill
-- Status: active · helpful 1 · harmful 0 · last_confirmed 2026-10-08
+- Status: active · helpful 2 · harmful 0 · last_confirmed 2026-10-09 (released 0.1.1 resubmitted the same 53 IDs: S-012, S-022, S-025 went from 1 to 0)
