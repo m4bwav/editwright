@@ -1,25 +1,21 @@
 # Handoff
 
-Updated 2026-10-08. Read this first, then [log.md](log.md) and [next-session-prompt.md](next-session-prompt.md).
+Updated 2026-10-09. Read this first, then [log.md](log.md) and [next-session-prompt.md](next-session-prompt.md).
 
 ## Current state
 
-- Public repo https://github.com/m4bwav/editwright, v0.1.0 released 2026-10-08 (tag on main e7bd36e, `editwright.zip` asset). Installed as editwright@mark-local (user scope) and registered in evergreen.
-- One skill (`skills/editwright/`), 11 kb files, `ew.py` CLI. Unit tests 26/26; CI green on Linux, macOS, Windows with Python 3.9 and 3.14; budget green (description 979 chars, SKILL.md about 2,050 tokens).
-- Eval suite 9/9 (TESTS.md T-20261008-2 and T-20261008-3): triggers 3/3 each, decoys 0/3 each, Bash cases with the skill 1.00, 0.92, 1.00, 1.00 against 0.29, 0.75, 0.00, 0.67 without. Bash cases run in WSL2 (see AGENTS.md Commands).
-- Research: five notes in [research/](research/); decisions: one skill, word limits and counting, works store and sync off.
-- First real pass done on the owner's short story (run with 0.1.0): job in the private works store (the vault sidecar's `works/`, see the decision on the works store). 53 suggestions, editorial letter, review.docx, check passed, the Google Doc's modified time unchanged. Waiting for the owner's reactions.
+- Public repo https://github.com/m4bwav/editwright, v0.1.1 released 2026-10-09 (tag on main 8d9a0d5, `editwright.zip` asset, 21 files, 70 KB). v0.1.0 also released (2026-10-08).
+- Installed as editwright@mark-local, still the 0.1.0 install: the marketplace update and reinstall were refused by the auto-mode classifier on 2026-10-09 and are left for the owner (`claude plugin marketplace update mark-local`, then uninstall and install editwright@mark-local). Until then run `skills/editwright/scripts/ew.py` from the main checkout, which is 0.1.1.
+- Unit tests 31/31; CI green on Linux, macOS, Windows with Python 3.9 and 3.14. Eval suite 9/9 (T-20261008-5).
+- Wiki at 0.1.1 (commit e9b7a76), verified; see [the wiki notes](notes/2026-10-08-wiki-run/2026-10-08-github-wiki.md).
+- README banner merged (PR #3).
+- First real pass on the owner's short story: job `the-old-crash-site/jobs/20261008-1-full` in the private works store. Resubmitted under 0.1.1 on 2026-10-09 with `--replace-all`: the same 53 IDs, ledger 0 AI-written words (S-012, S-022, S-025 went from 1 to 0), review.docx re-exported, check passed, the Google Doc's modified time still 2026-04-02 (unchanged). Waiting for the owner's reactions.
 
-## In progress
+## Open
 
-- The owner reviews the letter and suggestions and says which IDs they accept and what felt off.
-- README banner: pull request #3 (assets/banner.jpg, Z-Image Turbo, type band softened; workflow in assets/banner-workflow.api.json). Lesson filed in comfyui-gen as L-037 (its PR #11).
-
-## 0.1.1 (pull request #2, waiting for review)
-
-- Fixes LEARNINGS L-001 `corrections-of-own-words-counted-as-ai` (irregular forms, commonly confused words, the author's own word nearby; on the owner's story the ledger went from 3 false AI words to 0) and the wiki run's findings (echo check counts copied runs, changelog wording for author text, a refused intake writes nothing, README Privacy lookup order, kb/delivery source of truth). Tests 31/31, evals 9/9 (T-20261008-5); also L-002 (suggest keeps valid items; eval cases need 30 turns in prompt.md frontmatter).
-- After merge: tag v0.1.1, release with `editwright.zip`, `claude plugin marketplace update mark-local` and reinstall, update the wiki's version-bearing pages (list in [notes/2026-10-08-wiki-run/](notes/2026-10-08-wiki-run/2026-10-08-github-wiki.md)).
-- wikiwright lessons from the wiki run: m4bwav/wikiwright PR #9 (L-153, L-154).
+- Issue #4: suggest's skip key is built before validation and leaves out `problem` (L-003). Fix for 0.1.2: key after validation, add `problem`, no write when nothing was added, a test with items without `para`. Workaround: `--replace-all` and a `para` on every note.
+- wikiwright issue #10 (diffout splits on `## ` inside output). wikiwright PR #9 (L-153, L-154) from the first wiki run.
+- Design question for the owner: the nearby-word rule credits any swap to a content word in a neighbouring paragraph, even a change of meaning (cart to wagon). Keep, or require the swap to look like a typo fix?
 
 ## Next single action
 
