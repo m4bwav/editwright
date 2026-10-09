@@ -1,5 +1,7 @@
 # editwright
 
+![A typed manuscript page on a wooden desk in warm window light, its margins marked in red pencil with carets, circles and check marks, two sticky tabs on its edge and a red pencil lying beside it](assets/banner.jpg)
+
 An editor for your AI agent that marks the page and never writes on it.
 
 editwright edits writing the way a professional editor does: developmental notes and an editorial letter, manuscript assessment, line editing, copyediting and proofreading, script coverage and nonfiction fact-check flags. It works on short stories, novels, screenplays, essays and books. The author keeps every word:
@@ -52,6 +54,8 @@ editwright makes no network calls and sends your manuscript nowhere beyond the a
 ## How it was built
 
 Research notes with sources and dates are in [ai-docs/research/](ai-docs/research/); the editing knowledge the skill reads is in [skills/editwright/kb/](skills/editwright/kb/INDEX.md). The skill is an evergreen unit: it re-checks its research on a schedule and carries the tests that prove it works ([TESTS.md](skills/editwright/TESTS.md)).
+
+Banner image generated locally with Z-Image Turbo in ComfyUI, seed 3581877482, with the typed lines softened afterwards; prompt and workflow in [assets/banner-workflow.api.json](assets/banner-workflow.api.json).
 
 ## License
 
