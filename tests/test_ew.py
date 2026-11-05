@@ -248,7 +248,7 @@ class TestJob(Base):
     def test_apply_allows_a_source_with_only_new_bytes(self):
         self.intake()
         self.suggest()
-        self.src.write_bytes(STORY.replace("\n", "\r\n").encode("utf-8"))
+        (self.src).write_text(STORY + chr(10) * 2, encoding="utf-8")
         code, out = self.ew("apply", "story", "--accept", "S-001")
         self.assertEqual(code, 0, out)
         self.assertIn("words did not", out)
