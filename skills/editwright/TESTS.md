@@ -8,6 +8,9 @@ Entry shape: `### T-YYYYMMDD-n · date · harness · env · passed/total`, then 
 
 ## Runs
 
+### T-20261104-1 · 2026-11-04 · claude plugin eval, with-without · Windows 11 native · 5/5 of the 5 cases run
+- After C-20261104-1: trigger-1, -2, -3 at 1.00 with the skill, 0.00 without; decoy-1, -2 at 1.00. The action and outcome cases need WSL2 and were not rerun, so the Step 4 and Step 5 text is not eval-tested. ew.py apply is covered by unit tests.
+
 ### T-20261008-5 · 2026-10-08 · claude plugin eval 2.1.281 (default model), --ablation none · Windows 11 native + WSL2 Ubuntu · 9/9
 - After C-20261008-4 (30 turns in prompt.md frontmatter) and the clarified outcome-1 criterion: action-1, action-2, action-3 3 of 3 each at 1.00 (7 to 11 turns); outcome-1 3 of 3 (judge PASS PASS PASS each); trigger-1 to trigger-3 3 of 3; decoy-1 and decoy-2 0 of 3. About $6.
 - The no-skill baseline was measured in T-20261008-3 (action and outcome cases 0.29, 0.75, 0.00, 0.67) and not rerun.

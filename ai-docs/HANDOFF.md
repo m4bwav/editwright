@@ -17,6 +17,8 @@ Updated 2026-11-04. 0.2.0 added Saller's copyediting practice and apply's change
 - wikiwright issue #10 (diffout splits on `## ` inside output). wikiwright PR #9 (L-153, L-154) from the first wiki run.
 - Design question for the owner: the nearby-word rule credits any swap to a content word in a neighbouring paragraph, even a change of meaning (cart to wagon). Keep, or require the swap to look like a typo fix?
 
+- Owed from 0.2.0: rerun the action and outcome evals under WSL2 (T-20261104-1); the wiki is still at 0.1.1 and needs apply's new refusal and flags.
+
 ## Next single action
 
 Run [next-session-prompt.md](next-session-prompt.md).
