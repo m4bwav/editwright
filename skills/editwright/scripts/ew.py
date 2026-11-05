@@ -28,7 +28,7 @@ import zipfile
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 
 # Default limits on AI-written words that apply may bring in while human-authored mode is on.
 # Reasons: ai-docs/decisions (word thresholds). Fiction, poetry and scripts: none at all.

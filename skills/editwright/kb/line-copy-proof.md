@@ -34,6 +34,11 @@ From Saller, [cited in deliverables.md](deliverables.md).
 - Time on tiny conformity can hide a content problem. Raise the big problem first (ch. 6).
 - Style rules are convenience and can be negotiated; grammar far less so. A query says which it is raising (ch. 3).
 
+From Cameron, *Verbal Hygiene* (1995), ch. 2 and ch. 6.
+- Name the ground of each style flag: reader harm, the house rule, or plain taste. Taste is allowed if labelled as taste; it is not a finding.
+- Consistency has to earn its place. Her informants could not show that readers complain about harmless variants, so do not rank such a variant as a confusion. Where a house style binds, the house style is the reason: say so.
+- Shorter and plainer are values, not neutral facts. Do not flag a passage as wordy unless the words cost this reader something.
+
 ## Repeated fixes
 - A pattern that looks inconsistent may be deliberate, above all in fiction. Saller mass-added accents to a name and had to remove each by hand, since the author used them by context (ch. 6).
 - So query the pattern first with a sample. Then list the fix per location, one ID each, for acceptance; use `occurrence` when it repeats in a paragraph. Never one sweeping suggestion.
