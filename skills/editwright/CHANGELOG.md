@@ -4,6 +4,11 @@ Every change to [SKILL.md](SKILL.md) and its companions, newest first, each with
 
 Entry shape: `### C-YYYYMMDD-n · date · one-line summary`, then `because:` (IDs or "user request"), `files:` (file and section), and a sentence on what changed. Cite section headings, not line numbers.
 
+### C-20261105-1 · 2026-11-05 · Release 0.2.1: style flags name their ground
+- because: user request (book distillation, Cameron, Verbal Hygiene)
+- files: kb/line-copy-proof.md (Before a pervasive or laborious change), SKILL.md (metadata)
+- A style flag now says whether it rests on reader harm, a house rule or taste. Not yet run on a manuscript.
+
 ### C-20261104-1 · 2026-11-04 · Release 0.2.0: Saller's copyediting practice; apply refuses a changed source
 - because: R-20261104-1, user request
 - files: kb/deliverables.md (queries, Handover), kb/line-copy-proof.md (Before a pervasive or laborious change, Repeated fixes), kb/long-manuscripts.md, kb/INDEX.md, SKILL.md (Step 4, Step 5, metadata), scripts/ew.py (VERSION, source_drift, cmd_apply, cleanup, cmd_intake, cmd_suggest), ../../tests/test_ew.py, ../../.claude-plugin/plugin.json, ../../plugin.json, evergreen.json
