@@ -28,7 +28,7 @@ import zipfile
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
-VERSION = "0.1.1"
+VERSION = "0.2.0"
 
 # Default limits on AI-written words that apply may bring in while human-authored mode is on.
 # Reasons: ai-docs/decisions (word thresholds). Fiction, poetry and scripts: none at all.
@@ -335,7 +335,9 @@ def cleanup(text, quotes="auto", dashes="auto", keep_lines=False, headings=True)
         log.add("single line breaks made paragraph breaks (no blank lines in source)", max(len(nonempty) - 1, 0))
         t = "\n\n".join(nonempty)
     else:
-        blocks = re.split(r"\n\s*\n", "\n".join(lines))
+        whole = "\n".join(lines)
+        log.add("extra blank lines removed", sum(1 for m in re.findall(r"\n\s*\n", whole) if m != "\n\n"))
+        blocks = re.split(r"\n\s*\n", whole)
         out = []
         joined = split = 0
         for b in blocks:
@@ -385,13 +387,13 @@ def cleanup(text, quotes="auto", dashes="auto", keep_lines=False, headings=True)
         t = nt
     # dashes
     em = t.count("—")
-    dd = len(re.findall(r"(?<=\w)\s?--\s?(?=\w)", t))
+    dd = len(re.findall(r"(?<=\w)\s?--\s?(?=\w)", t))  # any such dash means the source uses them as dashes
     dmode = dashes
     if dashes == "auto":
         dmode = "em" if dd and em >= 0 else "keep"
     if dmode == "em":
-        t2 = re.sub(r"(?<=\w)\s?--\s?(?=\w)|(?<=\w)--(?=[\s”\"'’]|$)", "—", t)
-        log.add("double hyphens made em dashes", dd)
+        t2, made = re.subn(r"(?<=\w)\s?--\s?(?=\w)|(?<=\w)--(?=[\s”\"'’]|$)", "—", t)
+        log.add("double hyphens made em dashes", made)
         t = t2
     elif dmode == "double":
         log.add("em dashes made double hyphens", em)
@@ -676,6 +678,8 @@ def cmd_intake(a):
     print("source sha256: %s (snapshot %s, read-only)" % (src_hash, snap.name))
     print("clean.md: %d words, %d paragraphs; cleanup rules applied: %d (cleanup-log.md); word check passed" %
           (nwords, job["text"]["paragraphs"], len(log.rows)))
+    for rule, (count, _) in log.rows.items():
+        print("  cleanup: %s: %d" % (rule, count))
     print("mode: human-authored; AI-word limit for %s: %d words / %.1f%%" % (a.genre, th["words"], th["percent"]))
     if job["author_slug"]:
         ap = works / "authors" / (job["author_slug"] + ".md")
@@ -951,7 +955,7 @@ def cmd_suggest(a):
     if isinstance(incoming, dict):
         incoming = incoming.get("suggestions", [])
     def key(s):
-        return (s.get("level"), s.get("category"), s.get("para"), s.get("quote"), json.dumps(s.get("change"), sort_keys=True))
+        return (s.get("level"), s.get("category"), s.get("para"), s.get("quote"), s.get("occurrence"), json.dumps(s.get("change"), sort_keys=True))
 
     seen = {key(x) for x in data["suggestions"]}
     errors, added, dupes = [], [], 0
@@ -1196,6 +1200,43 @@ def within_limit(job, ai, pct):
     return False, "over the limit (%d words / %.1f%% for %s in human-authored mode)" % (th["words"], th["percent"], job["genre"])
 
 
+def source_drift(job, jdir, sugs, against=None):
+    """None when the author's source still matches intake; else the facts apply needs to refuse."""
+    s = job["source"]
+    path = Path(against) if against else Path(s["path"])
+    if not path.exists():
+        if against:
+            fail("not found: %s" % path)
+        print("note: source path %s is gone; cannot tell whether the author changed it" % path)
+        return None
+    if s.get("ref", "").startswith(("gdoc:", "http")) and not against:
+        print("note: the source is %s; pass --against a fresh export to catch edits made there" % s["ref"])
+    h = sha256_file(path)
+    if h == s["sha256"]:
+        return None
+    fresh = None
+    if path.suffix.lower() == ".docx" or path.suffix.lower() in TEXT_EXTS or path.suffix == "":
+        try:
+            fresh = source_text(path)[0]
+        except (OSError, ValueError, KeyError, ET.ParseError, zipfile.BadZipFile):
+            fresh = None
+    if fresh is not None and check_words_same(read_text(jdir / "source-text.md"), fresh) is None:
+        print("note: the source's bytes changed since intake but its words did not")
+        return None
+    rows = []
+    keys = word_key(fresh) if fresh is not None else None
+    for x in sugs:
+        q = word_key(x.get("quote", ""))
+        if keys is None or not q:
+            state = "cannot tell whether its quote is still there"
+        elif any(keys[i:i + len(q)] == q for i in range(len(keys) - len(q) + 1)):
+            state = "its quoted words are still in the source"
+        else:
+            state = "its quoted words are no longer in the source"
+        rows.append("%s: %s" % (x["id"], state))
+    return {"sha256": h, "rows": rows}
+
+
 def cmd_apply(a):
     jdir = resolve_job(a.job, a.works)
     job = load_job(jdir)
@@ -1261,6 +1302,20 @@ def cmd_apply(a):
               "Ask the author to write those words (--author-text) or to drop them; nothing applied." %
               (ai, pct, why, ", ".join(over)))
         return 1
+    drift = source_drift(job, jdir, [by_id[x["id"]] for x in plan], a.against)
+    if drift and not a.from_snapshot:
+        print("refused: the author's source changed since intake (sha256 %s); a file built now would lose those "
+              "edits. Nothing applied." % drift["sha256"][:16])
+        for row in drift["rows"]:
+            print("  - " + row)
+        print("Tell the author. Run intake on the current source and redo the affected suggestions, or, only if "
+              "the author plainly says to build from the old text, rerun with --from-snapshot.")
+        return 1
+    if drift:
+        print("warning: the source changed since intake; building from the intake snapshot, so the author's later "
+              "edits are not in this file")
+        for row in drift["rows"]:
+            print("  - " + row)
     out = text
     for x in reversed(plan):
         out = out[:x["start"]] + x["new"] + out[x["end"]:]
@@ -1275,6 +1330,8 @@ def cmd_apply(a):
     cl = ["# Changelog: %s" % target.name, "",
           "From clean.md (sha256 %s). Only the IDs the author accepted were applied. AI-written words: %s." %
           (job["text"]["clean_sha256"][:16], why), "",
+          *(["The source changed after intake and the author chose to build from the intake snapshot: "
+             "their later edits are not in this file.", ""] if drift else []),
           "| ID | Para | Before | After | Words | Who wrote the new words |", "|---|---|---|---|---|---|"]
     for x in plan:
         s = by_id[x["id"]]
@@ -1622,6 +1679,9 @@ def build_parser():
     p.add_argument("--author-text", action="append", help="ID=TEXT: words the author wrote for a query or in place of a proposal")
     p.add_argument("--author-file", help="JSON {ID: text} of words the author wrote")
     p.add_argument("--docx", action="store_true", help="also write the edited text as .docx")
+    p.add_argument("--against", help="a fresh export of the source (a Google Doc, say) to compare with the intake snapshot")
+    p.add_argument("--from-snapshot", action="store_true",
+                   help="build from the intake text although the source changed; only on the author's plain words")
     p.set_defaults(func=cmd_apply)
 
     p = sub.add_parser("export", help="review.docx with tracked changes and comments for Word or Google Docs")

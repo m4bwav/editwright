@@ -1,8 +1,8 @@
 ---
 title: Editorial deliverables
 kind: kb
-checked: 2026-10-08
-summary: Read when writing an editorial letter, margin comments or author queries, or building a style sheet, story bible, continuity log or scene sheet.
+checked: 2026-11-04
+summary: Read when writing an editorial letter, margin comments or author queries or a handover, or building a style sheet, story bible, continuity log or scene sheet.
 ---
 # Editorial deliverables
 
@@ -26,6 +26,18 @@ Length: an assessment "usually no more than 10 pages"; a developmental letter ca
 - CIEP voice principle: do not change tone of voice or style unless it is wrong for the readership. "Very few rights and wrongs"; consistency, clarity and context are key; know a rule from a preference (CIEP PDF pp. 5-6).
 - Change or query: replace only what is objectively wrong and covered by the agreed style (typo, style-sheet spelling, punctuation convention). Query anything touching meaning, voice, fact or a choice that looks deliberate (synthesis of ACES and CIEP). In editwright, anything needing new wording is always a query.
 - Fiction practice: query more, offer rephrasing options rather than rewrites (secondary, unverified).
+- Pervasive pattern: ask before the pass, not after. Name the pattern, say your default, ask their preference. It saves redoing the pass and shows what the author likes (Saller ch. 2).
+- Explain a repeated change once, at the first instance, then refer back. Do not justify every edit (Saller ch. 3).
+- A query may report the editor's own stumble as a reader (Saller ch. 3).
+- An odd request: ask what problem it solves before answering. A change rejected by an author who does not see the problem: spell out the problem and ask for their fix (Saller ch. 1, ch. 4).
+
+Saller: Carol Fisher Saller, *The Subversive Copy Editor* (U. Chicago Press, 2009); chapter numbers are the first edition's.
+
+## Handover
+Say these plainly whenever they apply:
+- Coverage: a check applied unevenly or dropped partway, and where it stopped. The author decides what to do (Saller ch. 6). Long manuscripts make this likely.
+- Silent changes: anything not shown individually, listed by type (Saller ch. 2). For cleanup that is `cleanup-log.md`.
+- Working copy: if the author edits the source after the suggestions, one party's changes can be lost (Saller ch. 7). Ask them to hold edits until apply, which refuses a changed source.
 
 ## Style sheet (copyedit deliverable, EFA)
 - References: dictionary, style manual, US or UK spelling.

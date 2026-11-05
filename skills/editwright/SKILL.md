@@ -3,7 +3,7 @@ name: editwright
 description: "Edit writing the way a professional editor does, without rewriting the author's voice: developmental notes and an editorial letter, manuscript assessment, line, copy and proofreading passes, script coverage, nonfiction argument and fact-check flags, for short stories, novels, scripts, essays and books. The author's file is never modified; suggestions carry IDs and quoted anchors, a ledger counts any AI-written words, and only the IDs the author accepts are applied, to a copy. Use whenever the user asks to edit, critique, proofread, copyedit, line edit or give notes on their story, chapter, manuscript, screenplay or essay ('edit my short story', 'what's not working in this chapter', 'proofread this', 'give me an editorial letter', 'beta read this', 'coverage on my script', 'apply S-004 and S-007'). Also for 'refresh editwright' and 'is editwright stale'. Not for writing or generating new prose, humanizing AI text (everwrite), or only reading a document (readwright)."
 license: MIT
 metadata:
-  version: "0.1.1"
+  version: "0.2.0"
 ---
 
 # editwright
@@ -60,7 +60,7 @@ It refuses any suggestion whose quote is not found verbatim (fix those and rerun
 
 ## Step 4: hand over and stop
 
-Run `EW check <job>`. Show the author the editorial letter (or its summary), the top suggestions by severity with their IDs, the ledger line, and where the files are. Then **stop** and ask which IDs they accept and what felt off: too timid, too pushy, missed the point, or crossed into rewriting. Do not apply anything in the same turn as presenting it.
+Run `EW check <job>`. Show the author the editorial letter (or its summary), the top suggestions by severity with their IDs, the ledger line, cleanup changes by type, any check dropped or uneven and where it stopped ([kb/deliverables.md](kb/deliverables.md), Handover), and where the files are. Then **stop** and ask which IDs they accept and what felt off: too timid, too pushy, missed the point, or crossed into rewriting. Do not apply anything in the same turn as presenting it.
 
 ## Step 5: apply what the author chose
 
@@ -70,7 +70,7 @@ EW feedback <job> --accepted S-003,S-007 --rejected S-001,S-004 --note "<what th
 EW check <job>
 ```
 
-Apply refuses unknown IDs, queries with no author text, overlapping changes, and AI-written words over the limit; never work around a refusal. Report the new file, its changelog and the ledger total. `feedback` updates the author's preferences; add one line to their `.md` file for any taste they stated.
+Apply refuses unknown IDs, queries with no author text, overlapping changes, AI-written words over the limit, and a source changed since intake (for a Google Doc pass `--against <fresh export>`); never work around a refusal. `--from-snapshot` only on the author's plain words. Report the new file, its changelog and the ledger total. `feedback` updates the author's preferences; add one line to their `.md` file for any taste they stated.
 
 ## While working: capture learnings
 

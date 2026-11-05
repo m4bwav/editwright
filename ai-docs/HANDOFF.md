@@ -1,6 +1,6 @@
 # Handoff
 
-Updated 2026-10-09. Read this first, then [log.md](log.md) and [next-session-prompt.md](next-session-prompt.md).
+Updated 2026-11-04. 0.2.0 added Saller's copyediting practice and apply's changed-source refusal; see [log.md](log.md), which is newer than the state list below where they differ. Read this first, then [log.md](log.md) and [next-session-prompt.md](next-session-prompt.md).
 
 ## Current state
 
@@ -16,6 +16,8 @@ Updated 2026-10-09. Read this first, then [log.md](log.md) and [next-session-pro
 - Issue #4: suggest's skip key is built before validation and leaves out `problem` (L-003). Fix for 0.1.2: key after validation, add `problem`, no write when nothing was added, a test with items without `para`. Workaround: `--replace-all` and a `para` on every note.
 - wikiwright issue #10 (diffout splits on `## ` inside output). wikiwright PR #9 (L-153, L-154) from the first wiki run.
 - Design question for the owner: the nearby-word rule credits any swap to a content word in a neighbouring paragraph, even a change of meaning (cart to wagon). Keep, or require the swap to look like a typo fix?
+
+- Owed from 0.2.0: rerun the action and outcome evals under WSL2 (T-20261104-1); the wiki is still at 0.1.1 and needs apply's new refusal and flags.
 
 ## Next single action
 

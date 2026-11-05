@@ -4,6 +4,11 @@ Every change to [SKILL.md](SKILL.md) and its companions, newest first, each with
 
 Entry shape: `### C-YYYYMMDD-n · date · one-line summary`, then `because:` (IDs or "user request"), `files:` (file and section), and a sentence on what changed. Cite section headings, not line numbers.
 
+### C-20261104-1 · 2026-11-04 · Release 0.2.0: Saller's copyediting practice; apply refuses a changed source
+- because: R-20261104-1, user request
+- files: kb/deliverables.md (queries, Handover), kb/line-copy-proof.md (Before a pervasive or laborious change, Repeated fixes), kb/long-manuscripts.md, kb/INDEX.md, SKILL.md (Step 4, Step 5, metadata), scripts/ew.py (VERSION, source_drift, cmd_apply, cleanup, cmd_intake, cmd_suggest), ../../tests/test_ew.py, ../../.claude-plugin/plugin.json, ../../plugin.json, evergreen.json
+- `apply` refuses when the author's source changed since intake, says per ID whether its quote survives, takes `--against` for a fresh export and `--from-snapshot` on the author's plain words, which the changelog records. A byte-only change passes with a note. Cleanup already logged by type; it now also logs extra blank lines and every em dash it makes, and intake prints the types. The suggest skip key includes `occurrence`, so a repeated fix listed per location in one paragraph is no longer dropped. No word-changing rule was added.
+
 ### C-20261008-4 · 2026-10-08 · suggest keeps the valid items; eval cases get 30 turns
 - because: L-002, T-20261008-4
 - files: scripts/ew.py (cmd_suggest), SKILL.md (Step 3), references/suggestion-format.md, ../../tests/test_ew.py, ../../evals/build_cases.py (max_turns in prompt.md frontmatter)

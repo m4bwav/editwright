@@ -13,3 +13,5 @@ Append-only. One line per operation: `## [YYYY-MM-DD] op | title` where op is on
 ## [2026-10-08] update | GitHub wiki live (10 pages, verified against v0.1.0); six 0.1.0 issues listed for 0.1.1
 ## [2026-10-08] build | 0.1.1: L-001 counting fix, wiki-run findings, suggest keeps valid items (L-002); evals 9/9
 ## [2026-10-09] release | v0.1.1 tagged and released (PR #2 merged); wiki updated to 0.1.1 (e9b7a76); job resubmitted under 0.1.1, ledger 3 to 0 with the same 53 IDs; suggest faults filed as issue #4 (L-003)
+## [2026-11-04] build | 0.2.0: Saller (The Subversive Copy Editor) rows in kb/deliverables.md and kb/line-copy-proof.md; apply refuses a changed source; cleanup logs blank lines and all em dashes; suggest key keeps occurrence
+## [2026-11-04] fix | CI: Python 3.9 on Linux moved to ubuntu-24.04; setup-python has no 3.9 for Ubuntu 26.04

@@ -1,7 +1,7 @@
 ---
 title: Line, copy and proof passes
 kind: kb
-checked: 2026-10-08
+checked: 2026-11-04
 summary: Read when running a line, copy or proof pass, reading ew.py stats counts, or deciding how many suggestions to deliver.
 ---
 # Line, copy and proof passes
@@ -27,6 +27,18 @@ Scope limits per level: [levels.md](levels.md). Sources: [editing craft note](..
 - Query obvious factual errors; do no research. Flag legal risks; do not solve them.
 - Queries valid, clear, concise, humble, numbered, polite (ACES).
 - No substantial rewriting (CIEP p. 17).
+
+## Before a pervasive or laborious change
+From Saller, [cited in deliverables.md](deliverables.md).
+- Is it wrong? Is it confusing? Is it ugly in a way that hinders the reader? An odd style that is consistent and clear stays, unless a house style binds it (ch. 6).
+- Time on tiny conformity can hide a content problem. Raise the big problem first (ch. 6).
+- Style rules are convenience and can be negotiated; grammar far less so. A query says which it is raising (ch. 3).
+
+## Repeated fixes
+- A pattern that looks inconsistent may be deliberate, above all in fiction. Saller mass-added accents to a name and had to remove each by hand, since the author used them by context (ch. 6).
+- So query the pattern first with a sample. Then list the fix per location, one ID each, for acceptance; use `occurrence` when it repeats in a paragraph. Never one sweeping suggestion.
+- Mass replace also breaks words: her examples are Paris Peach Conference, and causal turned to casual (ch. 7). Read each location.
+- Against the volume cap below, a repeated fix counts as one finding: show the sample and the count first.
 
 ## Proof pass
 - Typos, layout errors, style decisions applied.
