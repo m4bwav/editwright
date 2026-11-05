@@ -69,6 +69,13 @@ Best sources (primary first): CIEP, EFA and ACES pages; Chicago Manual of Style 
 
 Newest first. One entry per material finding; a quiet refresh gets one entry saying so. `Track` is subject, tooling, practice, or testing.
 
+### R-20261104-1 · 2026-11-04 · Saller on copyediting: triage, queries, repeated fixes, handover
+- Summary: test before a pervasive change (wrong, confusing, ugly in a way that hinders); style negotiable, grammar far less; ask about a pattern before the pass; explain a repeated change once; a repeated fix goes per location since an odd pattern may be deliberate and mass replace breaks words; report uneven coverage and silent changes; an author editing the source can lose changes. Paraphrased, no quotation.
+- Track: subject
+- Sources: Carol Fisher Saller, The Subversive Copy Editor (U. Chicago Press, 2009, first edition; a 2nd edition exists and was not compared), ch. 1, 2, 3, 4, 6, 7, read by the maintainer, who supplied the paraphrases and chapter citations
+- Magnitude: n/a (added source)
+- Applied: C-20261104-1 (kb/deliverables.md, kb/line-copy-proof.md, cmd_apply, cleanup)
+
 ### R-20261008-5 · 2026-10-08 · Delivery formats (testing track: how output is checked)
 - Summary: stdlib tracked-change and comment .docx verified by reading back with pandoc and LibreOffice; pandoc can write tracked changes from spans; CriticMarkup for markdown; Google Docs API SUGGEST mode is new; the Drive connector can upload and convert but not comment.
 - Track: testing

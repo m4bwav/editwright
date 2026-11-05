@@ -1,6 +1,6 @@
 # Handoff
 
-Updated 2026-10-09. Read this first, then [log.md](log.md) and [next-session-prompt.md](next-session-prompt.md).
+Updated 2026-11-04. 0.2.0 added Saller's copyediting practice and apply's changed-source refusal; see [log.md](log.md), which is newer than the state list below where they differ. Read this first, then [log.md](log.md) and [next-session-prompt.md](next-session-prompt.md).
 
 ## Current state
 

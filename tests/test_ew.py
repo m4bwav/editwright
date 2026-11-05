@@ -216,6 +216,67 @@ class TestJob(Base):
         self.assertEqual(ew.sha256_file(self.src), self.hash)
         self.assertEqual(self.ew("check", "story")[0], 0)
 
+    def test_apply_refuses_when_the_source_changed(self):
+        self.intake()
+        self.suggest()
+        self.src.write_text(STORY.replace("She realized teh man was her brother.", "She knew him at once."), encoding="utf-8")
+        code, out = self.ew("apply", "story", "--accept", "S-001,S-003")
+        self.assertEqual(code, 1, out)
+        self.assertIn("source changed", out)
+        self.assertIn("S-001: its quoted words are no longer in the source", out)
+        self.assertIn("S-003: its quoted words are still in the source", out)
+        self.assertFalse((self.job / "edited.md").exists())
+
+    def test_apply_from_snapshot_says_so_in_the_changelog(self):
+        self.intake()
+        self.suggest()
+        self.src.write_text(STORY + "\nA new last line.\n", encoding="utf-8")
+        code, out = self.ew("apply", "story", "--accept", "S-001", "--from-snapshot")
+        self.assertEqual(code, 0, out)
+        self.assertIn("warning", out)
+        self.assertNotIn("new last line", (self.job / "edited.md").read_text(encoding="utf-8"))
+        self.assertIn("later edits are not in this file", (self.job / "edited-changelog.md").read_text(encoding="utf-8"))
+
+    def test_apply_against_a_fresh_export(self):
+        self.intake()
+        self.suggest()
+        fresh = self.tmp / "export.txt"
+        fresh.write_text(STORY + "\nA new last line.\n", encoding="utf-8")
+        self.assertEqual(self.ew("apply", "story", "--accept", "S-001", "--against", str(fresh))[0], 1)
+        self.assertFalse((self.job / "edited.md").exists())
+
+    def test_apply_allows_a_source_with_only_new_bytes(self):
+        self.intake()
+        self.suggest()
+        self.src.write_bytes(STORY.replace("\n", "\r\n").encode("utf-8"))
+        code, out = self.ew("apply", "story", "--accept", "S-001")
+        self.assertEqual(code, 0, out)
+        self.assertIn("words did not", out)
+
+    def test_repeated_fix_listed_per_location_keeps_each_occurrence(self):
+        self.src.write_text("A causal note and a causal look and a causal word.\n", encoding="utf-8")
+        self.intake()
+        items = [{"level": "copy", "category": "typo", "para": 1, "quote": "causal", "occurrence": n,
+                  "change": {"replace": "casual"}, "problem": "Typo?"} for n in (1, 2, 3)]
+        code, out = self.suggest(items)
+        self.assertEqual(code, 0, out)
+        ids = [s["id"] for s in ew.load_suggestions(self.job)["suggestions"]]
+        self.assertEqual(len(ids), 3)
+        code, out = self.ew("apply", "story", "--accept", ids[1])
+        self.assertEqual(code, 0, out)
+        self.assertEqual((self.job / "edited.md").read_text(encoding="utf-8").count("casual"), 1)
+
+    def test_cleanup_reports_every_change_by_type(self):
+        self.src.write_text('One -- two.\n\n\n\nThree went--\n\nFour  five.\n', encoding="utf-8")
+        out = self.intake()
+        log = (self.job / "cleanup-log.md").read_text(encoding="utf-8")
+        self.assertIn("| extra blank lines removed | 1 |", log)
+        self.assertIn("| double hyphens made em dashes | 2 |", log)
+        self.assertIn("| runs of spaces inside lines made single | 1 |", log)
+        self.assertIn("cleanup: double hyphens made em dashes: 2", out)
+        self.assertIsNone(ew.check_words_same(self.src.read_text(encoding="utf-8"),
+                                              (self.job / "clean.md").read_text(encoding="utf-8")))
+
     def test_apply_refuses_unknown_ids(self):
         self.intake()
         self.suggest()

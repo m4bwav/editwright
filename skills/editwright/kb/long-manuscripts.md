@@ -1,7 +1,7 @@
 ---
 title: Long manuscripts
 kind: kb
-checked: 2026-10-08
+checked: 2026-11-04
 summary: Read when the manuscript runs 80k to 150k words; chapter cards, bible as memory, map/reduce passes and token budgets.
 ---
 # Long manuscripts (80k to 150k words)
@@ -58,5 +58,7 @@ Tokens per word is unresolved. Anthropic's model page says 1M tokens is about 55
 - Global questions go through the bible, cards and targeted passage loads only. Past 15k, split the bible (characters, places, timeline) and load only what a chapter touches.
 
 Nonfiction uses the same passes: cards carry each chapter's claim, grounds, warrant and checkable facts; reduce builds the argument map and claim table ([nonfiction.md](nonfiction.md)).
+
+A check that ran out partway gets reported with where it stopped ([deliverables.md](deliverables.md), Handover).
 
 Related: [deliverables.md](deliverables.md), [fiction.md](fiction.md), [nonfiction.md](nonfiction.md), [levels.md](levels.md)
