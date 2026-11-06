@@ -3,7 +3,7 @@ name: editwright
 description: "Edit writing the way a professional editor does, without rewriting the author's voice: developmental notes and an editorial letter, manuscript assessment, line, copy and proofreading passes, script coverage, nonfiction argument and fact-check flags, for short stories, novels, scripts, essays and books. The author's file is never modified; suggestions carry IDs and quoted anchors, a ledger counts any AI-written words, and only the IDs the author accepts are applied, to a copy. Use whenever the user asks to edit, critique, proofread, copyedit, line edit or give notes on their story, chapter, manuscript, screenplay or essay ('edit my short story', 'what's not working in this chapter', 'proofread this', 'give me an editorial letter', 'beta read this', 'coverage on my script', 'apply S-004 and S-007'). Also for 'refresh editwright' and 'is editwright stale'. Not for writing or generating new prose, humanizing AI text (everwrite), or only reading a document (readwright)."
 license: MIT
 metadata:
-  version: "0.2.1"
+  version: "0.2.2"
 ---
 
 # editwright

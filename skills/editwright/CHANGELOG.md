@@ -4,6 +4,11 @@ Every change to [SKILL.md](SKILL.md) and its companions, newest first, each with
 
 Entry shape: `### C-YYYYMMDD-n · date · one-line summary`, then `because:` (IDs or "user request"), `files:` (file and section), and a sentence on what changed. Cite section headings, not line numbers.
 
+### C-20261106-1 · 2026-11-06 · Release 0.2.2: believing pass and two-sides flag
+- because: user request (book distillation, Tannen, The Argument Culture)
+- files: kb/nonfiction.md (Argument check)
+Two argument steps added. Not yet run on a manuscript.
+
 ### C-20261105-1 · 2026-11-05 · Release 0.2.1: style flags name their ground
 - because: user request (book distillation, Cameron, Verbal Hygiene)
 - files: kb/line-copy-proof.md (Before a pervasive or laborious change), SKILL.md (metadata)
