@@ -29,7 +29,7 @@ Never run a humanizer or style rewriter (everwrite included) on the author's tex
 
 ## Step 1: intake
 
-Ask only what you cannot infer: genre (`fiction`, `short-story`, `novel`, `nonfiction`, `script`, `poetry`), level (`developmental`, `assessment`, `line`, `copy`, `proof`, `fact`, or `full`), and the author's name for their preferences file. Then:
+Ask only what you cannot infer: genre (`fiction`, `short-story`, `novel`, `nonfiction`, `script`, `poetry`), level (`developmental`, `assessment`, `line`, `copy`, `proof`, `fact`, or `full`), and the author's name for their preferences file. If the user is not the author (a publisher or freelance editor), ask whether the contract limits AI tools before reading on ([ai-text-rules](kb/ai-text-rules.md)). Then:
 
 ```
 EW intake FILE --work <slug> --title "<title>" --author "<name>" --genre <genre> --level <level>

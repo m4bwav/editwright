@@ -46,7 +46,7 @@ Slush practice: readers often stop within the first page. Common opening faults 
 - Asimov's and Analog: will not consider submissions "written, developed, or assisted by these tools" (asimovs.com/contact-us/writers-guidelines).
 - Uncanny: no submissions written with AI; undisclosed use leads to a ban (uncannymagazine.com/submissions).
 - Writers of the Future: work cannot be generated "in whole or in part" by AI (writersofthefuture.com/contest-rules-writers).
-- Nebula: LLM-written work ineligible; any LLM use in the writing process must be disclosed and disqualifies; may catch LLM-backed grammar checkers (secondary report).
+- Nebula: rule 10.7.1 makes work "written or translated, in whole or in part, utilizing generative AI or large language models" ineligible, without defining "utilizing" or mentioning grammar tools (nebulas.sfwa.org/about-the-nebulas/nebula-rules). Even diagnosis-only help may be risky: tell a Nebula hopeful to ask the Commissioner first.
 - None of these defines whether an AI grammar checker counts as "assisted". Treat even suggestions as a risk the author must weigh.
 
 Consequences for editwright:

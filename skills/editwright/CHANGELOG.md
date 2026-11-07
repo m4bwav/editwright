@@ -4,6 +4,11 @@ Every change to [SKILL.md](SKILL.md) and its companions, newest first, each with
 
 Entry shape: `### C-YYYYMMDD-n · date · one-line summary`, then `because:` (IDs or "user request"), `files:` (file and section), and a sentence on what changed. Cite section headings, not line numbers.
 
+### C-20261107-1 · 2026-11-07 · Non-author intake question; Nebula wording from the rule; detector and watermark facts
+- because: R-20261107-1
+- files: SKILL.md (Step 1: intake), kb/ai-text-rules.md, kb/short-story.md (Nebula line)
+- Intake asks a non-author about contract limits. The Nebula line now quotes the rule.
+
 ### C-20261106-1 · 2026-11-06 · Release 0.2.2: believing pass and two-sides flag
 - because: user request (book distillation, Tannen, The Argument Culture)
 - files: kb/nonfiction.md (Argument check)
