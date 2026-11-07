@@ -92,6 +92,19 @@
       "evidence": "graders in ../../../evals/action-3/graders (files and trace, never the reply alone)"
     },
     {
+      "id": "action-4",
+      "kind": "action",
+      "prompt": "Make me a Word file of your suggestions for my lighthouse story, as tracked changes I can accept or reject.",
+      "expectations": [
+        "ew.py export ran",
+        "review.docx exists in the job folder",
+        "story.txt unchanged"
+      ],
+      "runs": 3,
+      "evidence": "graders in ../../../evals/action-4/graders (files and trace)",
+      "baseline": "without the skill the agent edits the text or writes a plain document with no tracked changes"
+    },
+    {
       "id": "outcome-1",
       "kind": "outcome",
       "prompt": "Here's a short story I wrote, ./story.txt. Edit it like a professional editor would and tell me what you'd change.",
