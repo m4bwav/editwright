@@ -13,9 +13,9 @@
   "source": null,
   "topic": "Professional editing practice (levels of edit, editorial letters, style sheets, fiction and nonfiction craft, script coverage), AI-text provenance rules (watermarks, detectors, copyright, publisher and contest policies) and manuscript-editing tools, for an agent that diagnoses and never rewrites the author",
   "tier": "moderate",
-  "interval_days": 30,
-  "last_checked": "2026-10-08",
-  "next_due": "2026-11-07",
+  "interval_days": 20.0,
+  "last_checked": "2026-11-07",
+  "next_due": "2026-11-29",
   "verify_at_use": false,
   "volatile_claims": [],
   "contradiction": null,
@@ -32,12 +32,18 @@
       "m": null,
       "interval_after": 30,
       "note": "created"
+    },
+    {
+      "date": "2026-11-07",
+      "m": 0.4,
+      "interval_after": 20.0,
+      "note": "contract question, Nebula wording; cost: searches 21 · fetches 25 · tool calls 53"
     }
   ],
   "counts": {
     "learnings": 0,
     "changes": 0,
-    "research": 0,
+    "research": 1,
     "tests": 5
   },
   "consolidate_every": 25,

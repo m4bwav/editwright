@@ -69,6 +69,13 @@ Best sources (primary first): CIEP, EFA and ACES pages; Chicago Manual of Style 
 
 Newest first. One entry per material finding; a quiet refresh gets one entry saying so. `Track` is subject, tooling, practice, or testing.
 
+### R-20261107-1 · 2026-11-07 · Contract clause on publisher AI use; Nebula primary wording; detector spread; watermark coverage
+- Summary: Authors Guild model clause restricts publisher AI use (2026-04-22), and intake never asked who the user is. Nebula rule 10.7.1 read directly; the kb's "must be disclosed" came from a secondary report and is not in the rule. Authors Guild detector test shows a large spread between tools. Claude's text marks now cover older models; Bedrock completes 11-10. Prize dispute reportedly settled by drafts and notes, secondary, The Atlantic not confirmed. arXiv 2603.18161: grammar-only LLM edits changed meaning, abstract only, supports Rule 2. Docs MCP preview has comment and suggestion operations; unmarked OAuth clients rejected from 11-11. Tracked-change MCP servers exist (Safe Docx, Adeu, docx-mcp, revisedoc), listings only; the stdlib exporter stays. Word and Docs import of review.docx still unproven. Quiet: KDP help, Sudowrite, Marlowe, Fictionary, ProWritingAid. APODICTIC active, still no ledger.
+- Track: subject, tooling, practice, testing
+- Sources: https://authorsguild.org/news/use-of-ai-in-publishing-and-new-model-contract-clause, https://nebulas.sfwa.org/about-the-nebulas/nebula-rules/, https://authorsguild.org/news/can-ai-detectors-be-trusted/, https://support.claude.com/en/articles/16266773-how-claude-labels-ai-generated-content, https://theweek.com/culture-life/books/ai-commonwealth-prize-jamir-nazir, https://arxiv.org/abs/2603.18161, https://developers.google.com/workspace/docs/release-notes, https://www.cobalt.legal/news-cases/digital-omnibus-on-ai/, https://github.com/anotherpanacea-eng/apodictic
+- Magnitude: 0.4
+- Applied: C-20261107-1
+
 ### R-20261104-1 · 2026-11-04 · Saller on copyediting: triage, queries, repeated fixes, handover
 - Summary: test before a pervasive change (wrong, confusing, ugly in a way that hinders); style negotiable, grammar far less; ask about a pattern before the pass; explain a repeated change once; a repeated fix goes per location since an odd pattern may be deliberate and mass replace breaks words; report uneven coverage and silent changes; an author editing the source can lose changes. Paraphrased, no quotation.
 - Track: subject
