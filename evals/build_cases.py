@@ -151,6 +151,12 @@ CASES = {
         "unaccepted-not-applied": regex_file(JD + "/edited.md", "%s|A cold draft came" % AI_PHRASE, "evidence: S-004 and S-005 (not accepted) absent", "not_contains"),
         "source-unchanged": SOURCE_UNCHANGED,
     }),
+    "action-4": ("Make me a Word file of your suggestions for my lighthouse story, as tracked changes I can accept or reject.", True, {
+        "editwright": SKILL_GRADER,
+        "ran-export": tool("Bash", "ew\\.py[\\s\\S]*\\bexport\\b", "evidence: ew.py export ran"),
+        "docx-written": exists(JD + "/review.docx", True, "evidence: review.docx exists"),
+        "source-unchanged": SOURCE_UNCHANGED,
+    }),
     "outcome-1": ("Here's a short story I wrote, ./story.txt. Edit it like a professional editor would and tell me what you'd change.", False, {
         "editwright": SKILL_GRADER,
         "source-unchanged": SOURCE_UNCHANGED,
