@@ -4,6 +4,11 @@ Every change to [SKILL.md](SKILL.md) and its companions, newest first, each with
 
 Entry shape: `### C-YYYYMMDD-n · date · one-line summary`, then `because:` (IDs or "user request"), `files:` (file and section), and a sentence on what changed. Cite section headings, not line numbers.
 
+### C-20261107-2 · 2026-11-07 · Dialogue check: escalating habits and missed refusals
+- because: user request (book distillation pre-approved)
+- files: kb/fiction.md (Dialogue)
+- Adds one query from Tannen, You're the Only One I Can Tell (2017). Applying it to fiction is inference; no version bump.
+
 ### C-20261107-1 · 2026-11-07 · Non-author intake question; Nebula wording from the rule; detector and watermark facts
 - because: R-20261107-1
 - files: SKILL.md (Step 1: intake), kb/ai-text-rules.md, kb/short-story.md (Nebula line)
