@@ -47,6 +47,15 @@ Ask in your own words: "edit my short story ./story.md", "give me an editorial l
 | `ew.py check JOB` | confirm the source never changed |
 | `ew.py override JOB --reason "..."` | turn human-authored mode off for one job, only when you say so plainly |
 
+## Works with
+
+- **[readwright](https://github.com/m4bwav/readwright)**: readwright gets text out of PDFs and ebooks (`rw.py read FILE --out text.md`); editwright then suggests edits on that text.
+- **[cinewright](https://github.com/m4bwav/cinewright)**: writing a new script belongs to cinewright; editwright only suggests edits to one you already wrote.
+- **[grindwright](https://github.com/m4bwav/grindwright)**: grindwright's `writing` lane uses editwright for edit passes on long projects.
+- **[askwright](https://github.com/m4bwav/askwright)**: when there are many suggestions to accept or reject, askwright can lay them out as decisions on one page.
+
+The wiki's [Works with](https://github.com/m4bwav/editwright/wiki/Works-with) page describes each pairing in more detail.
+
 ## Privacy
 
 editwright makes no network calls and sends your manuscript nowhere beyond the agent you already use. Manuscripts, style sheets, story bibles and your preferences are kept in a works folder on your machine. The first of these wins: the `--works` option, the `EDITWRIGHT_WORKS` variable, `works` in a `.editwright.json` in the current folder, `works` in `~/.editwright.json` (another file can be named with `EDITWRIGHT_CONFIG`), and otherwise `~/editwright-works`. Point it at a private, backed-up folder. Nothing about your work is written to this repository.

@@ -15,3 +15,6 @@ Append-only. One line per operation: `## [YYYY-MM-DD] op | title` where op is on
 ## [2026-10-09] release | v0.1.1 tagged and released (PR #2 merged); wiki updated to 0.1.1 (e9b7a76); job resubmitted under 0.1.1, ledger 3 to 0 with the same 53 IDs; suggest faults filed as issue #4 (L-003)
 ## [2026-11-04] build | 0.2.0: Saller (The Subversive Copy Editor) rows in kb/deliverables.md and kb/line-copy-proof.md; apply refuses a changed source; cleanup logs blank lines and all em dashes; suggest key keeps occurrence
 ## [2026-11-04] fix | CI: Python 3.9 on Linux moved to ubuntu-24.04; setup-python has no 3.9 for Ubuntu 26.04
+
+## [2026-11-11] docs | Works with section
+README gained a Works with section (readwright, cinewright, grindwright, askwright); the wiki gained a Works-with page linked from the sidebar and Home. Each entry describes a handoff found in the skill files on one side or the other.
