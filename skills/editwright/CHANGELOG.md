@@ -4,6 +4,16 @@ Every change to [SKILL.md](SKILL.md) and its companions, newest first, each with
 
 Entry shape: `### C-YYYYMMDD-n · date · one-line summary`, then `because:` (IDs or "user request"), `files:` (file and section), and a sentence on what changed. Cite section headings, not line numbers.
 
+### C-20261118-3 · 2026-11-18 · Release 0.2.3
+- because: C-20261117-1, C-20261118-1, C-20261118-2
+- files: plugin.json, .claude-plugin/plugin.json, scripts/ew.py (VERSION), SKILL.md (metadata.version), evergreen.json (version)
+- Version 0.2.2 to 0.2.3, tag v0.2.3. Patch: kb guidance only since 0.2.2; ew.py unchanged apart from VERSION.
+
+### C-20261118-2 · 2026-11-18 · Nonfiction book checks from Norton, Germano and Hart
+- because: user request (book round 21: Norton, Developmental Editing; Germano, From Dissertation to Book, 2nd ed.; Hart, Storycraft); book rules, unverified, no check on our tools behind them
+- files: kb/nonfiction.md (Argument check, book level; Fact-check)
+- Adds thesis-or-topic labels per chapter with a borrowed-framework flag, a cut menu for over-length books, scholarly-to-book flags, and narrative nonfiction flags (reconstructed scenes, unrecorded dialogue, composites, implied presence, changed names, one-sided sources). Every item is a flag or an option for the author; nothing is drafted for them.
+
 ### C-20261118-1 · 2026-11-18 · Conflict-scene lens: tag lines by stress behaviour, flag same-type scenes
 - because: user request (book distillation, Patterson and others, Crucial Conversations, 3rd edition); book rule, unverified, no check on our tools behind it
 - files: kb/conflict-scenes.md (new), kb/fiction.md (Dialogue), kb/INDEX.md

@@ -1,7 +1,7 @@
 ---
 title: Nonfiction
 kind: kb
-checked: 2026-10-08
+checked: 2026-11-18
 summary: Read when checking a nonfiction argument or its facts, choosing a style guide, or setting up a nonfiction style sheet.
 ---
 # Nonfiction
@@ -25,6 +25,12 @@ Steps:
 
 Book level: state the reader promise from the introduction; check each chapter delivers part of it and the end pays it off. One job per chapter, an opening that sets the question, evidence, a close that answers and hands off. Flag repeated material. Structure before chapter arguments before lines; never line-edit a chapter that may be cut. Reverse outline per paragraph (what it says, what it does) shows overloaded paragraphs, thin ideas and order problems (writingcenter.virginia.edu/reverse-outlining-organization-strategy).
 
+Per chapter card, label the main claim thesis (a stated stance) or topic (a subject only); never supply the stance for the author. Flag a borrowed framework restated as the book's own thesis (Norton, *Developmental Editing*, ch. 3).
+
+Over length: offer a cut menu and let the author pick: digressions off the main line, several examples where one does the job, detail beyond the point, the same arc told more than once (Norton, ch. 7).
+
+Dissertation or report becoming a book? Flag an opening literature review, citation strings that prop up a claim, block quotes of well-known sources the text never analyses, notes outweighing text (Germano, *From Dissertation to Book*, 2nd ed., pp. 23, 107, 110).
+
 ## Fact-check: flag, never assert
 - Never call a fact true or false from model memory. Generative search tools gave wrong answers on over 60% of news-citation queries (Tow Center, cjr.org, March 2025, via search).
 - What gets checked: names, titles, dates, numbers, quotations, descriptions or interpretations of data (Borel, *The Chicago Guide to Fact-Checking*, 2nd ed., 2023).
@@ -35,6 +41,7 @@ Book level: state the reader promise from the introduction; check each chapter d
 - Use `checked against` only when a primary source was fetched in this session; quote the supporting line.
 - Flag every direct quote for checking against the recording or document. Never fix a quote's wording.
 - Internal arithmetic (totals, percentages, units) is not a fact claim; check it.
+- Narrative nonfiction: flag scenes the writer did not witness that name no source, and long dialogue nobody recorded. Also flag composite characters, wording that implies presence, changed names with no author's note, and sources picked only to fit the theme (Hart, *Storycraft*, ch. 14).
 
 ## Style guide choice
 | Guide | Current edition | Use for |
