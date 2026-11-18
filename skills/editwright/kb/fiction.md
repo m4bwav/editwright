@@ -41,6 +41,7 @@ Every item is a question. Report findings with locations and options; the author
 - Ornate tags or adverbs; too many beats or none? (Browne & King)
 - What is the scene about beneath the talk? (Baxter, subtext)
 - In a quarrel, does each reply push the other speaker further into their habit? Can a refusal fail because the hearer misses it? (Tannen 2017, from real talk among friends, not fiction)
+- In a quarrel or confrontation, run the stress-behaviour lens in [conflict-scenes.md](conflict-scenes.md).
 
 **Character arc**
 - Does the self-revelation answer the weakness set up early? (Truby)

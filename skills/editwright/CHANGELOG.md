@@ -4,6 +4,11 @@ Every change to [SKILL.md](SKILL.md) and its companions, newest first, each with
 
 Entry shape: `### C-YYYYMMDD-n · date · one-line summary`, then `because:` (IDs or "user request"), `files:` (file and section), and a sentence on what changed. Cite section headings, not line numbers.
 
+### C-20261118-1 · 2026-11-18 · Conflict-scene lens: tag lines by stress behaviour, flag same-type scenes
+- because: user request (book distillation, Patterson and others, Crucial Conversations, 3rd edition); book rule, unverified, no check on our tools behind it
+- files: kb/conflict-scenes.md (new), kb/fiction.md (Dialogue), kb/INDEX.md
+- Each line in a conflict scene gets one of six stress behaviours or a repair; scenes where every line is one type, or the mix never moves, become author queries. No version bump.
+
 ### C-20261117-1 · 2026-11-17 · Fiction questions: proportion, planted rescues, POV count, narrator foreshadowing, payoff ledger
 - because: user request (book distillation, Dodd, The Writer's Compass); book rule, unverified, no check on our tools behind any item
 - files: kb/fiction.md (POV and psychic distance, Scene and sequel, Stakes and desire, Pacing, Openings, Lenses)
