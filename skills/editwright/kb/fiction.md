@@ -1,7 +1,7 @@
 ---
 title: Fiction diagnosis
 kind: kb
-checked: 2026-10-08
+checked: 2026-11-17
 summary: Read when diagnosing a story or novel; diagnostic questions by area, craft lenses with their status, and choices not to flag.
 ---
 # Fiction diagnosis
@@ -13,6 +13,8 @@ Every item is a question. Report findings with locations and options; the author
 - Whose story is it? Are POV changes deliberate and signalled?
 - Where does distance jump more than one rung without a bridge?
 - Is interior monologue tagged in a way that breaks the voice?
+- Does a POV holder get one section only, or first appear late? Count sections per POV. (Dodd)
+- Does the narrator tell what the character cannot know ("if only he knew")? Plant the clue in what the character notices instead. (Dodd)
 
 **Scene and sequel** (Swain, McKee)
 - What does the POV character want here, and what opposes it?
@@ -20,17 +22,20 @@ Every item is a question. Report findings with locations and options; the author
 - Where is the reaction to the last setback? Does a decision launch the next goal?
 - Stimulus before response, or does the character react before the cause appears?
 - Does each scene cause the next ("because of that", not "and then")?
+- Is each reaction in proportion to its cause, or its growth shown? Would a reader ask "why not just do X"? (Dodd)
 
 **Stakes and desire**
 - What does the protagonist want, what do they need, and do they differ? (Truby)
 - What wrong belief does each scene test? (Cron; use the questions, never cite her neuroscience as fact.)
 - Does anyone choose anything? Is there a choice at the crisis? (Baxter, Story Grid)
+- Does each rescue or lucky break use means planted earlier, or arrive from outside? (Dodd)
 
 **Pacing**
 - What does the reader learn per chapter, and where does it stall? (Bell)
 - On a slow page, what does the POV character feel that pulls two ways? (Maass)
 - Page by page: what does the reader know, expect, and did the story beat that or repeat it? Where did interest drop? Does each section escalate? (Saunders)
 - Too many words on minor things? (Browne & King, proportion)
+- Setup and payoff ledger: any setup never paid, or every payoff held for the end? (Dodd)
 
 **Dialogue**
 - Ornate tags or adverbs; too many beats or none? (Browne & King)
@@ -43,7 +48,7 @@ Every item is a question. Report findings with locations and options; the author
 
 **Openings**
 - Can premise, genre and reader be stated in three sentences? If not, that is finding 1. (Story Grid)
-- Backstory or description before anything happens to someone? (writermag.com/?p=56828)
+- Backstory or description before anything happens to someone? Could it be implied instead? (writermag.com/?p=56828, Dodd)
 
 **Endings**
 - Does the ending pay off the opening's promise and the genre's obligatory scenes? (Story Grid, The Writer)
@@ -64,6 +69,7 @@ Every item is a question. Report findings with locations and options; the author
 - Truby, *The Anatomy of Story* (2007): seven steps from weakness and need to new equilibrium.
 - Browne & King, *Self-Editing for Fiction Writers*: chapter checklists (show and tell, POV, proportion, dialogue mechanics, beats, repetition, voice). Still the standard line-level checklist.
 - Saunders, *A Swim in a Pond in the Rain* (2021): first-time-reader meter, page-by-page summary, escalation. Active via Story Club. Suits an AI reader.
+- Dodd, *The Writer's Compass* (2011): proportion, planted rescues, POV count, payoff ledger. Taught advice, unverified.
 - Le Guin, *Steering the Craft* (rev. 2015): sound, repetition, POV, crowding and leaping. Best compression lens.
 - Maass, *Writing the Breakout Novel* (2001): tension on every page, microtension.
 - Bell, *Refuse to Be Done* (2022): reverse outline, retype, one-task polish passes, rate of revelation.
