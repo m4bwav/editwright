@@ -4,6 +4,11 @@ Every change to [SKILL.md](SKILL.md) and its companions, newest first, each with
 
 Entry shape: `### C-YYYYMMDD-n · date · one-line summary`, then `because:` (IDs or "user request"), `files:` (file and section), and a sentence on what changed. Cite section headings, not line numbers.
 
+### C-20261119-2 · 2026-11-19 · Release 0.3.0
+- because: C-20261119-1
+- files: plugin.json, .claude-plugin/plugin.json, scripts/ew.py (VERSION), SKILL.md (metadata.version), evergreen.json (version)
+- Version 0.2.3 to 0.3.0, tag v0.3.0. Minor: ew.py stats gains a look block.
+
 ### C-20261119-1 · 2026-11-19 · Named story checks; stats look-lists
 - because: user request (book round 6: Browne & King, Self-Editing for Fiction Writers; Truby, The Anatomy of Story; Bradbury, Zen in the Art of Writing; Hemingway on Writing; McKee, Story); book rules, unverified against readers; L-004
 - files: kb/story-checks.md (new), kb/scripts.md (story checks for coverage), kb/line-copy-proof.md (Reading ew.py stats), kb/INDEX.md, scripts/ew.py (text_stats look block, story-bible template), tests/test_ew.py
