@@ -1,7 +1,7 @@
 ---
 title: Scripts
 kind: kb
-checked: 2026-10-08
+checked: 2026-11-19
 summary: Read when editing a screenplay or stage play, checking script format, or writing coverage.
 ---
 # Scripts
@@ -71,6 +71,14 @@ Rubric, each row citing pages:
 - Marketability: genre, budget signals, comparables. Mark as opinion.
 
 "Black List style" request: score Premise, Plot, Character, Dialogue, Setting 1 to 10, give Overall separately (not an average), and say it imitates, and is not, a Black List evaluation (secondary source; blcklst.com unreachable).
+
+Story checks for coverage (McKee, *Story*, ch. 12-21; Truby ch. 10), each a flag with a page:
+- `late-entry`: the scene opens before its conflict starts; name the later entry point.
+- `buried-key-line`: the scene's key line is followed by more talk.
+- `as-you-know`: a line gives facts both speakers know; exposition works as ammunition in the conflict.
+- `inciting-offscreen`: the main plot's inciting incident is in backstory, not on the page.
+- `crisis-offscreen`: the crisis decision is skipped or cut away from.
+- `late-coincidence`: a coincidence past the midpoint, or one that turns the ending.
 
 Common reader complaints: generic voice copying an existing show; dialogue from the writer, not the character; a strong opening that loses momentum and repeats its best beat; main conflict starting late after world-building (creativescreenwriting.com).
 
