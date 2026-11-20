@@ -67,6 +67,14 @@ LY_EXCEPT = set("""only family early reply apply supply july italy fly holy ugly
 silly hilly chilly daily lonely lovely friendly likely ugly costly elderly curly surly folly melancholy""".split())
 TAG_VERBS = set("""said says asked asks replied whispered shouted yelled muttered murmured snapped hissed growled
 exclaimed cried called answered added continued sighed laughed breathed barked snarled gasped""".split())
+# Named feelings in narration (Browne & King ch. 1; Hemingway on Writing ch. 5): a look-list, never a verdict.
+EMOTION_WORDS = set("""angry anger furious fury afraid fear feared scared frightened terrified terror sad sadness
+sorrow grief grieved happy happiness joy joyful glad ashamed shame guilty guilt jealous jealousy envious lonely
+nervous anxious anxiety worried relieved relief embarrassed humiliated disappointed hopeful despair desperate
+miserable upset annoyed irritated excited proud pride hatred hated""".split())
+ING_NOT_VERB = set("""nothing something anything everything morning evening king ring spring thing during ceiling
+string wing sibling building wedding pudding""".split())
+QUOTE_RE = re.compile(r"“[^”]*”|\"[^\"\n]*\"")
 
 
 # ---------------------------------------------------------------- basics
@@ -667,7 +675,7 @@ def cmd_intake(a):
     for name, head in (("style-sheet.md", "# Style sheet: %s\n\nSpellings, capitalisation, numbers, hyphenation and "
                                           "punctuation choices the author made, one per line with a paragraph "
                                           "reference. Built during the copy pass; never applied to the source.\n"),
-                       ("story-bible.md", "# Story bible: %s\n\nCharacters (name, age, look, voice, relationships), "
+                       ("story-bible.md", "# Story bible: %s\n\nCharacters (name, age, look, voice, relationships, backstory), "
                                           "places, timeline, objects and facts the text has fixed, each with the "
                                           "paragraph that fixed it.\n")):
         if not (wdir / name).exists():
@@ -844,6 +852,7 @@ def text_stats(text, top=12):
     ing = len(re.findall(r"\b(?:was|were)\s+\w+ing\b", text, re.I))
     started = len(re.findall(r"\b(?:began|begun|begins|started|starts)\s+to\b", text, re.I))
     longest = sorted(sents, key=lambda x: -x[2])[:5]
+    look = look_lists(paras)
     per_k = lambda c: round(1000.0 * c / n, 1)
     return {
         "words": len(all_words), "paragraphs": len(paras), "sentences": len(sents),
@@ -865,7 +874,53 @@ def text_stats(text, top=12):
         "was_ing": ing, "began_started_to": started,
         "dialogue_tags": dict(tags.most_common(top)),
         "same_first_word_in_a_row": dict(starts.most_common(6)),
+        "look": look,
     }
+
+
+def look_lists(paras):
+    """Places to read, by paragraph number (Browne & King ch. 1, 9, 11; Hemingway ch. 5). Counts only."""
+    ing_as, long_half, long_page, bang, emo = [], [], [], [], collections.Counter()
+    emo_paras = set()
+    chapters = []
+    for i, p in enumerate(paras, 1):
+        if p.startswith("#"):
+            chapters.append(0)
+            continue
+        if p == "* * *":
+            continue
+        n = len(words(p))
+        if chapters:
+            chapters[-1] += n
+        if n > 450:
+            long_page.append(i)
+        elif n > 250:
+            long_half.append(i)
+        narr = QUOTE_RE.sub(" ", p)
+        if "!" in narr:
+            bang.append(i)
+        for w in words(narr):
+            if norm_word(w) in EMOTION_WORDS:
+                emo[norm_word(w)] += 1
+                emo_paras.add(i)
+        for snt in sentences(narr):
+            ws = words(snt)
+            if not ws or "," not in snt:
+                continue
+            w0 = norm_word(ws[0])
+            if len(words(snt.split(",")[0])) <= 10 and (
+                    w0 == "as" or (w0.endswith("ing") and len(w0) > 4 and w0 not in ING_NOT_VERB)):
+                ing_as.append(i)
+    out = {"ing_as_openers": {"count": len(ing_as), "paras": sorted(set(ing_as))[:20]},
+           "paragraphs_over_half_page": long_half[:20], "paragraphs_over_a_page": long_page[:20],
+           "exclamations_in_narration": bang[:20],
+           "named_emotions_in_narration": {"count": sum(emo.values()), "top": emo.most_common(8),
+                                           "paras": sorted(emo_paras)[:20]}}
+    chapters = [c for c in chapters if c]
+    if len(chapters) >= 3:
+        cv = statistics.pstdev(chapters) / statistics.mean(chapters)
+        out["chapter_words"] = {"counts": chapters, "cv": round(cv, 2), "all_same_length": cv < 0.1}
+    return out
 
 
 def cmd_stats(a):
@@ -897,6 +952,18 @@ def cmd_stats(a):
     print("top words: " + ", ".join("%s %d" % kv for kv in st["top_words"]))
     print("was/were + -ing: %d; began/started to: %d; dialogue tags: %s; same first word twice running: %s" %
           (st["was_ing"], st["began_started_to"], st["dialogue_tags"] or "none", st["same_first_word_in_a_row"] or "none"))
+    lk = st["look"]
+    pl = lambda xs: ("P" + ",".join(map(str, xs[:12]))) if xs else "none"
+    em = lk["named_emotions_in_narration"]
+    print("look at: -ing/as openers %s; paragraphs over half a page %s, over a page %s; ! in narration %s" %
+          (pl(lk["ing_as_openers"]["paras"]), pl(lk["paragraphs_over_half_page"]), pl(lk["paragraphs_over_a_page"]),
+           pl(lk["exclamations_in_narration"])))
+    print("named feelings in narration: %d (%s) %s" %
+          (em["count"], ", ".join("%s %d" % kv for kv in em["top"][:6]) or "none", pl(em["paras"])))
+    if "chapter_words" in lk:
+        cw = lk["chapter_words"]
+        print("chapter words %s, variation %s%s" % (cw["counts"][:12], cw["cv"],
+                                                    " (all about the same length)" if cw["all_same_length"] else ""))
     print("(counts only; whether any of it is a problem is the editor's call, in context)")
     return 0
 

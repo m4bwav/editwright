@@ -6,6 +6,14 @@ Write an entry the moment a real signal happens: a user correction, the same err
 
 ## Active
 
+### L-004 · 2026-11-19 · look-lists-are-whole-paragraph-and-whole-chapter: fixtures for long-paragraph and chapter checks broke twice
+- Trigger: book round 6, 2026-11-19: the first test fixtures for `look_lists` failed because a 340-word paragraph also counted as over half a page, and short chapters next to 100-word ones never read as "all the same length".
+- Hypothesis: the page thresholds (250 and 450 words) and the chapter variation (below 0.1) are coarse; a fixture has to set every paragraph and chapter size on purpose.
+- Rule: in look-list tests, size each paragraph and chapter against the thresholds explicitly, and check both the firing and the quiet case. The -ing/as list counts only sentences with a comma whose first clause is ten words or fewer, outside quotes; words like "nothing" and "morning" are skipped.
+- Evidence: tests/test_ew.py test_look_lists_fire_on_bad_text and test_look_lists_quiet_on_good_text, C-20261119-1
+- Scope: skill
+- Status: active · helpful 0 · harmful 0 · last_confirmed 2026-11-19
+
 ### L-003 · 2026-10-09 · suggest-dedupe-key-before-validation: resubmits duplicate items without para and drop distinct notes
 - Trigger: wiki update to 0.1.1, 2026-10-09, scratch job: the same file run twice saved two items without `para` twice; two developmental notes on the whole piece with different `problem` text collapsed to one ("skipped 1 already in suggestions.json").
 - Hypothesis: the skip key in cmd_suggest is built from the incoming item before validate_suggestion fills in `para`, and it leaves out `problem`.

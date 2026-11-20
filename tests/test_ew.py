@@ -153,6 +153,7 @@ class TestJob(Base):
         self.assertEqual(job["mode"], "human-authored")
         self.assertEqual(job["threshold"]["words"], 0)
         self.assertTrue((Path(self.works) / "story" / "style-sheet.md").exists())
+        self.assertIn("backstory", (Path(self.works) / "story" / "story-bible.md").read_text(encoding="utf-8"))
 
     def test_check_passes_then_fails_when_source_changes(self):
         self.intake()
@@ -401,6 +402,30 @@ class TestJob(Base):
         self.assertEqual(st["filter_words"]["count"], 3)
         self.assertEqual(st["ly_adverbs"]["count"], 2)
         self.assertEqual(st["was_ing"], 1)
+
+    def test_look_lists_fire_on_bad_text(self):
+        long = " ".join(["word"] * 300)
+        paras = ["# One", "Disappearing into my tent, I changed my shirt.", "She was angry and afraid!",
+                 "As the door closed, he ran.", long, "# Two", "x " * 500, "# Three", "y " * 20]
+        lk = ew.look_lists(paras)
+        self.assertEqual(lk["ing_as_openers"]["paras"], [2, 4])
+        self.assertEqual(lk["exclamations_in_narration"], [3])
+        self.assertEqual(lk["named_emotions_in_narration"]["count"], 2)
+        self.assertEqual(lk["paragraphs_over_half_page"], [5])
+        self.assertEqual(lk["paragraphs_over_a_page"], [7])
+        self.assertFalse(lk["chapter_words"]["all_same_length"])
+
+    def test_look_lists_quiet_on_good_text(self):
+        paras = ["# One", "Nothing moved, so she waited.", "“I am so angry!” he said.",
+                 "He pulled off his gloves and turned.", "# Two", "a " * 18, "# Three", "b " * 19]
+        lk = ew.look_lists(paras)
+        self.assertEqual(lk["ing_as_openers"]["count"], 0)
+        self.assertEqual(lk["exclamations_in_narration"], [])
+        self.assertEqual(lk["named_emotions_in_narration"]["count"], 0)
+        self.assertEqual(lk["paragraphs_over_half_page"] + lk["paragraphs_over_a_page"], [])
+        self.assertTrue(lk["chapter_words"]["all_same_length"])
+        self.assertEqual(ew.look_lists(["One paragraph."])["ing_as_openers"]["count"], 0)
+        self.assertNotIn("chapter_words", ew.look_lists(["# A", "x", "# B", "y"]))
 
     def test_docx_source(self):
         d = self.tmp / "story.docx"
