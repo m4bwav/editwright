@@ -427,6 +427,50 @@ class TestJob(Base):
         self.assertEqual(ew.look_lists(["One paragraph."])["ing_as_openers"]["count"], 0)
         self.assertNotIn("chapter_words", ew.look_lists(["# A", "x", "# B", "y"]))
 
+    def test_clarity_lists_fire_on_zombie_prose(self):
+        paras = ["# Report",
+                 "The committee made a decision about the implementation of the arrangement after consideration.",
+                 "We will carry out an evaluation of the proposal.",
+                 "She walked to the station and read the document."]
+        cl = ew.clarity_lists(paras)
+        self.assertEqual(cl["nominalisations"]["dense_paras"], [2])
+        self.assertEqual(cl["light_verb_pairs"]["count"], 2)
+        self.assertIn("made a decision", cl["light_verb_pairs"]["examples"])
+        self.assertIn("carry out an evaluation", cl["light_verb_pairs"]["examples"])
+        # station and document are on the exception list; "implementation" counted, heading skipped
+        top = dict(cl["nominalisations"]["top"])
+        self.assertNotIn("station", top)
+        self.assertNotIn("document", top)
+        self.assertEqual(top["implementation"], 1)
+
+    def test_clarity_lists_quiet_on_plain_prose(self):
+        paras = ["The committee decided to build it after thinking it over.",
+                 "Give the chosen rule a name. Make reference images first.",
+                 "See [the notes](ai-docs/decisions/implementation-and-consideration.md) and `evaluation()`.",
+                 "STATEMENT OF THE CONSIDERATION AND DETERMINATION OF JURISDICTION",
+                 "Smith said: \"the implementation of the arrangement after consideration\"."]
+        cl = ew.clarity_lists(paras)
+        self.assertEqual(cl["light_verb_pairs"]["count"], 0)
+        self.assertEqual(cl["nominalisations"]["dense_paras"], [])
+        # only "reference" in plain prose counts; links, code, the shouted caption and the quote do not
+        self.assertEqual(cl["nominalisations"]["top"], [("reference", 1)])
+
+    def test_structure_lists_maps_over_four(self):
+        paras = ["The appeal raises five issues: standing, bias, merger, classes and mootness.",
+                 "There are three reasons.", "Slope over the last eight points is shown.",
+                 "## Six principles"]
+        st = ew.structure_lists(paras)
+        self.assertEqual(st["maps_over_four"], [{"para": 1, "text": "five issues"}])
+
+    def test_stats_prints_clarity_and_structure(self):
+        f = self.tmp / "memo.md"
+        f.write_text("We made a decision on the termination of the agreement after negotiation.\n\n"
+                     "The client faces six risks.\n", encoding="utf-8")
+        code, out = self.ew("stats", str(f))
+        self.assertEqual(code, 0, out)
+        self.assertIn("light verb + noun 1 (made a decision)", out)
+        self.assertIn("announced lists over four items P2 six risks", out)
+
     def test_docx_source(self):
         d = self.tmp / "story.docx"
         ew.write_docx(d, ["## Chapter 1", "It was dark.", "She waited."])

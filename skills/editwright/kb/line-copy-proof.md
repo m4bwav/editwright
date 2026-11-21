@@ -57,7 +57,7 @@ Counts are prompts to look, never verdicts. A count names where to read; the fin
 - Close repeats: check each against intent. An echo can be deliberate (Le Guin's crowding); accidental repetition is the target (Browne & King, "once is usually enough").
 - -ly adverbs and dialogue tags: look hardest at adverbs on tags and at ornate tags (Browne & King). A plain count of adverbs is the simple-rule approach writers criticise in AutoCrit.
 - Filter words, crutch words, was+ing: treat as places to read, like ProWritingAid's narrow named reports. Nothing in the research sets a threshold for them.
-- The `look` block (-ing/as openers, long paragraphs, ! in narration, named feelings, chapter lengths) points to the named checks in [story-checks.md](story-checks.md).
+- The `look` block points to [story-checks.md](story-checks.md); the `clarity` and `structure` lines to [clarity.md](clarity.md) and [structure.md](structure.md).
 - Set the genre first (AutoCrit lesson); what counts as a problem depends on it.
 - Check the style sheet's "author style, keep" entries before flagging. Fragments, odd punctuation and long sentences are often deliberate.
 - Compare against the book's own baseline, not a bestseller average (regression to the mean).

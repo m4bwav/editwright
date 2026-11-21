@@ -4,6 +4,17 @@ Every change to [SKILL.md](SKILL.md) and its companions, newest first, each with
 
 Entry shape: `### C-YYYYMMDD-n · date · one-line summary`, then `because:` (IDs or "user request"), `files:` (file and section), and a sentence on what changed. Cite section headings, not line numbers.
 
+### C-20261120-2 · 2026-11-20 · Release 0.4.0
+- because: C-20261120-1
+- files: plugin.json, .claude-plugin/plugin.json, scripts/ew.py (VERSION), SKILL.md (metadata.version), evergreen.json (version)
+- Version 0.3.0 to 0.4.0, tag v0.4.0. Minor: ew.py stats gains clarity and structure lines.
+
+### C-20261120-1 · 2026-11-20 · Clarity, syntax and document-architecture checks; stats clarity and structure lines
+- because: user request (book harvest 2026-11-20: Pinker, *The Sense of Style*, 2014; Armstrong and Terrell, *Thinking Like a Writer*, PLI 2009); book rules, unverified against readers; thresholds (four map items, eight to ten sentences per paragraph) are the authors' experience
+- files: kb/clarity.md (new), kb/syntax.md (new), kb/structure.md (new), kb/INDEX.md, kb/nonfiction.md (pointer), kb/line-copy-proof.md (Reading ew.py stats), SKILL.md (Step 4, item 2), scripts/ew.py (clarity_lists, structure_lists, cmd_stats), tests/test_ew.py
+- Three kb files of things to read for, never auto-fixes: nonfiction word-level clarity (zombie nouns, light verbs, metaconcepts, scare quotes, hedges where a condition belongs, abbreviations, role names), sentence syntax for any genre (agreement, paired markers, pronoun case, garden paths, misattached modifiers, centre-embedding, heavy last, known before new) and document architecture (introductions before blocks of detail, maps of four or fewer, roadsigns, the ways maps fail, default orders, memo, issue statement and email rules). nonfiction.md and line-copy-proof.md were at the 6,000-byte cap, so they carry pointers only.
+- `EW stats` gains a `clarity` line (nominalisations per 1000 words, paragraphs dense with them, light verb + noun pairs) and a `structure` line (announced lists of five or more). Measured on five book extracts (27k words, real legal briefs and memos among them) and 316 real repository docs (648k words): nominalisation rate 27.9 against 11.5 per 1000; dense paragraphs 12 and 32, most of a 10-paragraph sample plausible in the books, mixed in notes; light verb pairs 3 hits, 3 true after a following-word filter (16 hits, 9 true before it); lists over four 12 hits, each a real announced list, after a filter for "the last eight points" style counts. Dropped after measurement: announced count against the parts that follow (about 20 distinct hits, all false: nested lists, whole-document headings, questions that are not maps) and abbreviations used before expansion (3,480 hits in the repository docs, nearly all familiar technical terms). Existing stats output is unchanged on the same inputs.
+
 ### C-20261119-2 · 2026-11-19 · Release 0.3.0
 - because: C-20261119-1
 - files: plugin.json, .claude-plugin/plugin.json, scripts/ew.py (VERSION), SKILL.md (metadata.version), evergreen.json (version)
