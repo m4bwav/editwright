@@ -16,6 +16,7 @@ summary: Read first, to pick the one kb file the task needs.
 - [nonfiction.md](nonfiction.md): read when checking an argument or facts, or choosing a style guide.
 - [clarity.md](clarity.md): read during a nonfiction line pass for zombie nouns, light verbs, metaconcepts, scare quotes, hedges, abbreviations and role names.
 - [structure.md](structure.md): read during a structural pass on reports, memos, briefs and papers (containers, maps, roadsigns, default orders), and for legal and business documents.
+- [argument.md](argument.md): read during a developmental pass on persuasive nonfiction (how many reasons, which first, objections, concessions, the close), for paragraph links, the first-sentence skim and bracketed cuts.
 - [scripts.md](scripts.md): read when editing a screenplay or stage play, or writing coverage.
 - [ai-text-rules.md](ai-text-rules.md): read before any replacement, and when an author asks about watermarks, detectors or disclosure.
 - [delivery.md](delivery.md): read when choosing output formats (markdown, CriticMarkup, .docx, Google Docs).

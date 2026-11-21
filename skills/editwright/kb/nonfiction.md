@@ -9,12 +9,10 @@ summary: Read when checking a nonfiction argument or its facts, choosing a style
 Source: [scripts, nonfiction and books note](../../../ai-docs/research/2026-10-08-scripts-nonfiction-books.md), section 2.
 
 ## Argument check (diagnose only)
-Vocabulary:
 - Toulmin (owl.purdue.edu, Toulmin Argument): claim; grounds (evidence); warrant (the assumption linking grounds to claim); optional backing, qualifier, rebuttal.
 - Graff and Birkenstein, *They Say / I Say*, 6th ed. (Norton, 2024): name the view you answer, then your own.
 - Booth, Colomb and Williams, *The Craft of Research*, 5th ed. (U. Chicago Press, 2024): claim, reasons, evidence, acknowledgment and response, warrant.
 
-Steps:
 1. State the piece's claim in one sentence. If you cannot, that is the first note.
 2. Per section: claim, grounds, warrant. Flag missing warrants and grounds that support a different claim.
 3. Flag claims stronger than their evidence; suggest that a qualifier is needed, without writing it.
@@ -23,7 +21,7 @@ Steps:
 6. Before objecting, restate the piece's best case as if it were true (Elbow's believing game, via Tannen, *The Argument Culture*, 1998), so notes report strengths as well as faults.
 7. Flag a two-sides frame when the subject has more than two, or when it gives a baseless claim parity (Tannen, same).
 
-Below book level: [structure.md](structure.md). Sentences: [clarity.md](clarity.md).
+Below book level: [structure.md](structure.md), [argument.md](argument.md), [clarity.md](clarity.md).
 
 Book level: state the reader promise from the introduction; check each chapter delivers part of it and the end pays it off. One job per chapter, an opening that sets the question, evidence, a close that answers and hands off. Flag repeated material. Structure before chapter arguments before lines; never line-edit a chapter that may be cut. Reverse outline per paragraph (what it says, what it does) shows overloaded paragraphs, thin ideas and order problems (writingcenter.virginia.edu/reverse-outlining-organization-strategy).
 

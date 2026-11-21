@@ -21,3 +21,6 @@ README gained a Works with section (readwright, cinewright, grindwright, askwrig
 
 ## [2026-11-20] build | 0.4.0: clarity, syntax and structure kb files; stats clarity and structure lines
 From the 2026-11-20 book harvest (Pinker, The Sense of Style; Armstrong and Terrell, Thinking Like a Writer). New kb/clarity.md, kb/syntax.md, kb/structure.md. `EW stats` prints nominalisation rate, dense paragraphs, light verb + noun pairs and announced lists over four. Count-vs-parts and early-abbreviation counters were measured on real documents and dropped as noise (numbers in CHANGELOG C-20261120-1).
+
+## [2026-11-21] build | bracketed cuts, --firsts skim, bridged-openers count, kb/argument.md
+From the round 7 book harvest (Zinsser, Garner, Scalia and Garner). `bracket` suggestion items (zero-word cuts shown in brackets), `EW show --firsts`, `EW stats` bridged openers line, new kb/argument.md for argument order. No version bump; details and drops in CHANGELOG C-20261121-1.

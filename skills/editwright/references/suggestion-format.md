@@ -41,6 +41,7 @@ Read when writing the JSON file for `ew.py suggest`. The script validates every 
 | `why` | recommended | why it matters to the reader or the market |
 | `options` | recommended | kinds of fix, described, not drafted |
 | `change` | optional | `{"replace": "..."}`; `""` cuts the quote. Smallest span, the author's own words wherever possible |
+| `bracket` | optional | `true` marks the quote as removable clutter: shown as `[quote]` in review.md with "read it without the brackets"; accepting the ID cuts it. A cut, so zero AI-written words; refused with a non-empty `change` |
 | `severity` | optional | 1 minor, 2 worth fixing (default), 3 serious |
 
 ## What may be a change, and what must be a query
