@@ -3,7 +3,7 @@ name: editwright
 description: "Edit writing the way a professional editor does, without rewriting the author's voice: developmental notes and an editorial letter, manuscript assessment, line, copy and proofreading passes, script coverage, nonfiction argument and fact-check flags, for short stories, novels, scripts, essays and books. The author's file is never modified; suggestions carry IDs and quoted anchors, a ledger counts any AI-written words, and only the IDs the author accepts are applied, to a copy. Use whenever the user asks to edit, critique, proofread, copyedit, line edit or give notes on their story, chapter, manuscript, screenplay or essay ('edit my short story', 'what's not working in this chapter', 'proofread this', 'give me an editorial letter', 'beta read this', 'coverage on my script', 'apply S-004 and S-007'). Also for 'refresh editwright' and 'is editwright stale'. Not for writing or generating new prose, humanizing AI text (everwrite), or only reading a document (readwright)."
 license: MIT
 metadata:
-  version: "0.3.0"
+  version: "0.4.0"
 ---
 
 # editwright
@@ -48,7 +48,7 @@ Read the whole piece once before judging anything (`EW show <job>` prints number
 Open [kb/levels.md](kb/levels.md) for what each level covers and where it stops, and the genre file ([kb/fiction.md](kb/fiction.md), [kb/short-story.md](kb/short-story.md), [kb/nonfiction.md](kb/nonfiction.md), [kb/scripts.md](kb/scripts.md)).
 
 1. Developmental or assessment: write `editorial-letter.md` in the job folder ([kb/deliverables.md](kb/deliverables.md)): what works (specifically), the two or three biggest issues with quoted evidence and paragraph numbers, why each matters to the reader, options for each, and questions for the author. No line fixes in the letter.
-2. Line, copy and proof passes: [kb/line-copy-proof.md](kb/line-copy-proof.md). Rank by severity and keep the list short enough to act on; a flood of small flags buries the useful ones. Leave deliberate style alone unless it fails its own purpose, and log the author's choices in the style sheet.
+2. Line, copy and proof passes: [kb/line-copy-proof.md](kb/line-copy-proof.md), plus [kb/syntax.md](kb/syntax.md) in any genre; for nonfiction also [kb/clarity.md](kb/clarity.md) and, at the structural level, [kb/structure.md](kb/structure.md). Rank by severity and keep the list short enough to act on; a flood of small flags buries the useful ones. Leave deliberate style alone unless it fails its own purpose, and log the author's choices in the style sheet.
 
 Write suggestions as a JSON list ([references/suggestion-format.md](references/suggestion-format.md)) and add them:
 

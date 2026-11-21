@@ -28,7 +28,7 @@ import zipfile
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
-VERSION = "0.3.0"
+VERSION = "0.4.0"
 
 # Default limits on AI-written words that apply may bring in while human-authored mode is on.
 # Reasons: ai-docs/decisions (word thresholds). Fiction, poetry and scripts: none at all.
@@ -75,6 +75,29 @@ miserable upset annoyed irritated excited proud pride hatred hated""".split())
 ING_NOT_VERB = set("""nothing something anything everything morning evening king ring spring thing during ceiling
 string wing sibling building wedding pudding""".split())
 QUOTE_RE = re.compile(r"“[^”]*”|\"[^\"\n]*\"")
+# Nonfiction clarity and structure look-lists (Pinker, The Sense of Style, ch. 2-4; Armstrong and Terrell,
+# Thinking Like a Writer, ch. 2-3). Places to read, never verdicts; see kb/clarity.md and kb/structure.md.
+NOMINAL_RE = re.compile(r"^[a-z]{3,}(?:tion|sion|ment|ance|ence)s?$")
+NOMINAL_EXCEPT = set("""nation station question section portion ration lotion potion mention vision version
+television mansion pension tension mission passion fashion occasion cushion onion million billion lion moment
+comment element document department environment apartment equipment instrument monument segment fragment
+sentiment parliament tournament experiment garment pavement basement government ointment compartment torment
+science audience sentence conference residence evidence experience difference distance balance chance glance
+entrance finance instance substance province fence presence absence sequence silence licence license defence
+defense offence offense essence violence influence intelligence conscience consequence ambulance romance
+performance appliance alliance insurance france florence lawrence clarence prudence""".split())
+LIGHT_VERB_RE = re.compile(
+    r"\b(?:make|makes|made|making|carry\s+out|carries\s+out|carried\s+out|carrying\s+out|conduct|conducts|conducted|"
+    r"conducting|perform|performs|performed|performing|provide|provides|provided|providing|give|gives|gave|given|"
+    r"giving|undertake|undertakes|undertook|undertaken|undertaking|effect|effected|achieve|achieved|reach|reached)"
+    r"\s+(?:a|an|the|some|any|further|an\s+initial|a\s+full|a\s+detailed)?\s*"
+    r"([a-z]{3,}(?:tion|sion|ment|ance|ence))\b"
+    r"(?=\s+(?:of|to|for|on|in|with|about|by|between|that|against|into|from|and|or)\b|\s*[.,;:)]|\s*$)", re.I)
+NUM_WORDS = {"two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10}
+ANNOUNCE_RE = re.compile(
+    r"(?<!last )(?<!first )(?<!next )(?<!previous )\b(two|three|four|five|six|seven|eight|nine|ten)\s+(?:(?:main|key|separate|distinct|basic|principal|major|"
+    r"independent|related|broad|core)\s+)?(reasons|issues|grounds|questions|steps|parts|points|factors|arguments|"
+    r"problems|options|elements|claims|risks|rules|tests|stages|categories|objections|lessons|principles)\b", re.I)
 
 
 # ---------------------------------------------------------------- basics
@@ -853,7 +876,10 @@ def text_stats(text, top=12):
     started = len(re.findall(r"\b(?:began|begun|begins|started|starts)\s+to\b", text, re.I))
     longest = sorted(sents, key=lambda x: -x[2])[:5]
     look = look_lists(paras)
+    clarity = clarity_lists(paras)
+    structure = structure_lists(paras)
     per_k = lambda c: round(1000.0 * c / n, 1)
+    clarity["nominalisations"]["per_1000"] = per_k(clarity["nominalisations"]["count"])
     return {
         "words": len(all_words), "paragraphs": len(paras), "sentences": len(sents),
         "sentence_length": {"mean": round(statistics.mean(lens), 1), "median": statistics.median(lens),
@@ -875,6 +901,8 @@ def text_stats(text, top=12):
         "dialogue_tags": dict(tags.most_common(top)),
         "same_first_word_in_a_row": dict(starts.most_common(6)),
         "look": look,
+        "clarity": clarity,
+        "structure": structure,
     }
 
 
@@ -923,6 +951,53 @@ def look_lists(paras):
     return out
 
 
+def heading_level(p):
+    m = re.match(r"(#{1,6})\s", p)
+    return len(m.group(1)) if m else 0
+
+
+def clarity_lists(paras):
+    """Nonfiction clarity places to read (Pinker ch. 2 and 4): nominalisation rate, paragraphs dense with
+    them, light verb + nominalisation pairs. Counts only; kb/clarity.md says how to read them. An
+    abbreviations-before-expansion list was measured and dropped as noise (CHANGELOG C-20261120-1)."""
+    nom, dense, light, light_paras = collections.Counter(), [], [], set()
+    for i, p in enumerate(paras, 1):
+        if heading_level(p) or p == "* * *":
+            continue
+        # drop links, paths, code spans and shouted lines (all-caps headings, court captions) before counting
+        p = re.sub(r"\]\([^)\s]*\)|https?://\S+|`[^`\n]*`|\S+/\S+", " ", p)
+        prose = "\n".join(ln for ln in QUOTE_RE.sub(" ", p).split("\n")
+                          if sum(c.isupper() for c in ln) <= 0.6 * max(sum(c.isalpha() for c in ln), 1))
+        ws = words(prose)
+        here = 0
+        for w in ws:
+            k = norm_word(w)
+            if w[0].islower() and NOMINAL_RE.match(k) and k not in NOMINAL_EXCEPT and k[:-1] not in NOMINAL_EXCEPT:
+                nom[k] += 1
+                here += 1
+        if here >= 3 and here * 100.0 / max(len(ws), 1) >= 8:
+            dense.append(i)
+        for m in LIGHT_VERB_RE.finditer(prose):
+            if m.group(1).lower() not in NOMINAL_EXCEPT:
+                light.append(re.sub(r"\s+", " ", m.group(0).lower()))
+                light_paras.add(i)
+    return {"nominalisations": {"count": sum(nom.values()), "top": nom.most_common(8), "dense_paras": dense[:20]},
+            "light_verb_pairs": {"count": len(light), "examples": light[:8], "paras": sorted(light_paras)[:20]}}
+
+
+def structure_lists(paras):
+    """Announced maps over four items ('six principles', 'five categories'; Armstrong and Terrell ch. 3,
+    four is a book rule, unverified). A count-vs-parts check was measured and dropped (kb/structure.md)."""
+    over_four = []
+    for i, p in enumerate(paras, 1):
+        if heading_level(p):
+            continue
+        m = ANNOUNCE_RE.search(QUOTE_RE.sub(" ", p))
+        if m and NUM_WORDS[m.group(1).lower()] > 4:
+            over_four.append({"para": i, "text": m.group(0)})
+    return {"maps_over_four": over_four[:20]}
+
+
 def cmd_stats(a):
     p = Path(a.target)
     if p.is_file():
@@ -964,6 +1039,13 @@ def cmd_stats(a):
         cw = lk["chapter_words"]
         print("chapter words %s, variation %s%s" % (cw["counts"][:12], cw["cv"],
                                                     " (all about the same length)" if cw["all_same_length"] else ""))
+    cl, sr = st["clarity"], st["structure"]
+    print("clarity (nonfiction): nominalisations %s per 1000 (%s), dense in %s; light verb + noun %d (%s)" %
+          (cl["nominalisations"]["per_1000"], ", ".join("%s %d" % kv for kv in cl["nominalisations"]["top"][:5]) or "none",
+           pl(cl["nominalisations"]["dense_paras"]), cl["light_verb_pairs"]["count"],
+           "; ".join(cl["light_verb_pairs"]["examples"][:4]) or "none"))
+    print("structure: announced lists over four items %s" %
+          ("; ".join("P%d %s" % (x["para"], x["text"]) for x in sr["maps_over_four"][:8]) or "none"))
     print("(counts only; whether any of it is a problem is the editor's call, in context)")
     return 0
 
