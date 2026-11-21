@@ -4,6 +4,12 @@ Every change to [SKILL.md](SKILL.md) and its companions, newest first, each with
 
 Entry shape: `### C-YYYYMMDD-n · date · one-line summary`, then `because:` (IDs or "user request"), `files:` (file and section), and a sentence on what changed. Cite section headings, not line numbers.
 
+### C-20261121-1 · 2026-11-21 · Bracketed cuts, first-sentence skim, paragraph-link count, argument-order checks
+- because: user request (book harvest round 7: Zinsser, *On Writing Well*, ch. 3, 9; Garner, *Legal Writing in Plain English*, sec. 5, 24, 25, 30; Scalia and Garner, *Making Your Case*, sec. 7-12, 19-21); book rules, unverified against readers; the one-third bridge floor is a seminar target
+- files: kb/argument.md (new), kb/INDEX.md, kb/nonfiction.md (pointer), SKILL.md (Step 3, item 2), references/suggestion-format.md (`bracket`), scripts/ew.py (bracket items, show --firsts, bridge_lists, stats line), tests/test_ew.py
+- A suggestion with `"bracket": true` is a zero-word cut rendered as `[quote]` in review.md and suggestions.md, so the author reads the sentence without it and decides. `EW show --firsts` prints first sentences only for the skim test. `EW stats` prints `bridged openers: N of M` with the unlinked paragraphs (pointing word, connective, or an echo from the last two sentences before). On this repository's README and research notes it read 17-44%, low on list-heavy notes as expected. New kb file for argument order (scattershot, strongest first, objections in the middle, concessions, motive attacks, label drift, weak close, source-by-source facts): nonfiction.md was at the byte cap.
+- Dropped: stats counts of qualifiers, modifier pairs, contractions and absolutes (everwrite's job or untested), lead and alarm-clock checks (overlap with the short-story and nonfiction openings), date-litany, whether-issue and drafting-trap queries (legal-only, lexwright's side), dangling-across-sentence (syntax.md covers misattached modifiers), business voice, paragraph-length rule (already "uniform length" in story checks).
+
 ### C-20261120-2 · 2026-11-20 · Release 0.4.0
 - because: C-20261120-1
 - files: plugin.json, .claude-plugin/plugin.json, scripts/ew.py (VERSION), SKILL.md (metadata.version), evergreen.json (version)

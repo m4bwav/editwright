@@ -98,6 +98,16 @@ ANNOUNCE_RE = re.compile(
     r"(?<!last )(?<!first )(?<!next )(?<!previous )\b(two|three|four|five|six|seven|eight|nine|ten)\s+(?:(?:main|key|separate|distinct|basic|principal|major|"
     r"independent|related|broad|core)\s+)?(reasons|issues|grounds|questions|steps|parts|points|factors|arguments|"
     r"problems|options|elements|claims|risks|rules|tests|stages|categories|objections|lessons|principles)\b", re.I)
+# Paragraph bridges (Garner, Legal Writing in Plain English, 3rd ed., sec. 25): an opener links back by a pointing
+# word, an explicit connective, or an echo of a content word from the end of the paragraph before.
+POINTING_RE = re.compile(r"^\W*(?:\w+\s+){0,3}?(?:this|that|these|those|such)\b", re.I)
+CONNECTIVE_RE = re.compile(
+    r"^\W*(?:also|and|but|yet|so|still|further|furthermore|moreover|besides|again|similarly|likewise|"
+    r"however|instead|nevertheless|nonetheless|conversely|meanwhile|then|later|next|first|second|third|"
+    r"finally|last|lastly|thus|therefore|hence|consequently|accordingly|indeed|admittedly|granted|"
+    r"of course|in short|in sum|in contrast|on the other hand|by contrast|even so|for example|for instance|"
+    r"as a result|in addition|in other words|that is|to be sure|in the same way|after|before|since|because|"
+    r"although|though|while|unlike|like)\b", re.I)
 
 
 # ---------------------------------------------------------------- basics
@@ -778,7 +788,10 @@ def cmd_show(a):
         hi = int(m.group(2) or lo)
     out = []
     for i in range(max(lo, 1), min(hi, len(paras)) + 1):
-        out.append("[P%d] %s" % (i, paras[i - 1]))
+        p = paras[i - 1]
+        if a.firsts and not heading_level(p):
+            p = (sentences(p) or [p])[0]
+        out.append("[P%d] %s" % (i, p))
     text = "\n\n".join(out)
     if len(text) > a.max_chars:
         text = text[:a.max_chars] + "\n[... cut at %d characters; ask for a smaller --para range]" % a.max_chars
@@ -995,7 +1008,31 @@ def structure_lists(paras):
         m = ANNOUNCE_RE.search(QUOTE_RE.sub(" ", p))
         if m and NUM_WORDS[m.group(1).lower()] > 4:
             over_four.append({"para": i, "text": m.group(0)})
-    return {"maps_over_four": over_four[:20]}
+    return {"maps_over_four": over_four[:20], "bridges": bridge_lists(paras)}
+
+
+def bridge_lists(paras):
+    """Count paragraph openers that link to the paragraph before (Garner sec. 25; his floor is about a third).
+    Only consecutive prose paragraphs count; a heading resets the chain. A prompt, never a finding."""
+    total, bridged, none_ = 0, 0, []
+    prev = None
+    for i, p in enumerate(paras, 1):
+        if heading_level(p) or not words(p):
+            prev = None
+            continue
+        if prev is not None:
+            first = (sentences(p) or [p])[0]
+            tail = " ".join(sentences(prev)[-2:]) or prev
+            echo = {w.rstrip("s") for w in word_key(tail) if w not in STOP and len(w) > 3}
+            head = {w.rstrip("s") for w in word_key(first) if w not in STOP and len(w) > 3}
+            total += 1
+            if POINTING_RE.search(first) or CONNECTIVE_RE.search(first) or echo & head:
+                bridged += 1
+            else:
+                none_.append(i)
+        prev = p
+    pct = round(100.0 * bridged / total) if total else None
+    return {"openers": total, "bridged": bridged, "percent": pct, "no_bridge_paras": none_[:20]}
 
 
 def cmd_stats(a):
@@ -1046,6 +1083,11 @@ def cmd_stats(a):
            "; ".join(cl["light_verb_pairs"]["examples"][:4]) or "none"))
     print("structure: announced lists over four items %s" %
           ("; ".join("P%d %s" % (x["para"], x["text"]) for x in sr["maps_over_four"][:8]) or "none"))
+    br = sr["bridges"]
+    if br["openers"]:
+        print("bridged openers (nonfiction): %d of %d (%s%%)%s; no link back in %s" %
+              (br["bridged"], br["openers"], br["percent"], ", under a third" if br["percent"] < 33 else "",
+               pl(br["no_bridge_paras"])))
     print("(counts only; whether any of it is a problem is the editor's call, in context)")
     return 0
 
@@ -1074,6 +1116,14 @@ def validate_suggestion(s, text, genre):
         s["span"] = [start, end]
     elif s.get("change"):
         raise ValueError("%s: a change needs the exact quote it replaces" % s.get("id", "?"))
+    if s.get("bracket"):
+        # Zinsser's bracket (On Writing Well, ch. 3): mark removable words; the author reads without them
+        if not quote:
+            raise ValueError("%s: a bracket needs the exact quote it marks" % s.get("id", "?"))
+        if (s.get("change") or {}).get("replace"):
+            raise ValueError("%s: a bracket is a cut; drop 'change' or make it a change item" % s.get("id", "?"))
+        s["change"] = {"replace": ""}
+        s["bracket"] = True
     ch = s.get("change")
     if ch is not None:
         if "replace" not in ch:
@@ -1174,7 +1224,9 @@ def write_views(jdir):
                 lines.append("- Why it matters: %s" % s["why"])
             for j, o in enumerate(s.get("options", []), 1):
                 lines.append("- Option %d: %s" % (j, o))
-            if s.get("change") is not None:
+            if s.get("bracket"):
+                lines.append("- Bracketed: [%s]. Read it without the brackets; accept the ID to cut it." % s["quote"])
+            elif s.get("change") is not None:
                 pv = s["provenance"]
                 lines.append("- Proposed change: %s" % critic(s["quote"], s["change"]["replace"]))
                 lines.append("- Words: %s" % describe_pv(pv))
@@ -1190,7 +1242,9 @@ def write_views(jdir):
         if not s.get("span"):
             continue
         a_, b_ = s["span"]
-        if s.get("change") is not None:
+        if s.get("bracket"):
+            marks.append((a_, b_, "[%s]{>>%s: %s<<}" % (text[a_:b_], s["id"], s["problem"])))
+        elif s.get("change") is not None:
             marks.append((a_, b_, critic(text[a_:b_], s["change"]["replace"]) + "{>>%s<<}" % s["id"]))
         elif any(c["span"][0] < b_ and a_ < c["span"][1] for c in changes):
             end = offs[s["para"] - 1][1] if s.get("para") else b_
@@ -1793,6 +1847,7 @@ def build_parser():
     p.add_argument("job")
     p.add_argument("--para", help="N or N-M")
     p.add_argument("--file", help="another text file in the job folder")
+    p.add_argument("--firsts", action="store_true", help="first sentence of each paragraph only (skim test)")
     p.add_argument("--max-chars", type=int, default=25000)
     p.set_defaults(func=cmd_show)
 

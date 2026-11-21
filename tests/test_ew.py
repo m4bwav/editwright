@@ -471,6 +471,48 @@ class TestJob(Base):
         self.assertIn("light verb + noun 1 (made a decision)", out)
         self.assertIn("announced lists over four items P2 six risks", out)
 
+    def test_bridges_fire_on_unlinked_openers_and_stay_quiet_on_linked(self):
+        linked = ["The court read the contract narrowly.",
+                  "That reading left the tenant without a remedy.",
+                  "But the tenant had paid the deposit in full.",
+                  "The deposit is the heart of the dispute."]
+        br = ew.bridge_lists(linked)
+        self.assertEqual((br["openers"], br["bridged"], br["no_bridge_paras"]), (3, 3, []))
+        loose = ["The court read the contract narrowly.", "Rainfall in March was heavy.",
+                 "## Next part", "Parking near the station costs more.", "Owls hunt at night."]
+        br = ew.bridge_lists(loose)
+        self.assertEqual((br["openers"], br["bridged"], br["percent"], br["no_bridge_paras"]), (2, 0, 0, [2, 5]))
+
+    def test_stats_prints_bridges_and_show_firsts(self):
+        f = self.tmp / "essay.md"
+        f.write_text("Cats sleep a lot. They wake at dusk.\n\nRain fell on the town. Roads flooded.\n", encoding="utf-8")
+        code, out = self.ew("stats", str(f))
+        self.assertIn("bridged openers (nonfiction): 0 of 1 (0%), under a third; no link back in P2", out)
+        self.intake()
+        code, out = self.ew("show", "story", "--firsts", "--para", "2")
+        self.assertEqual(code, 0, out)
+        self.assertIn("[P2] Mara saw the door open slowly.", out)
+        self.assertNotIn("cold air", out)
+
+    def test_bracket_is_a_zero_word_cut_shown_in_brackets(self):
+        self.intake()
+        items = [{"level": "line", "category": "clutter", "para": 3, "quote": " quietly", "bracket": True,
+                  "problem": "Whispered already says it."}]
+        code, out = self.suggest(items)
+        self.assertEqual(code, 0, out)
+        s = ew.load_suggestions(self.job)["suggestions"][0]
+        self.assertEqual((s["ai_words"], s["change"]), (0, {"replace": ""}))
+        self.assertIn("she whispered[ quietly]{>>S-001", (self.job / "review.md").read_text(encoding="utf-8"))
+        self.assertIn("Read it without the brackets", (self.job / "suggestions.md").read_text(encoding="utf-8"))
+        code, out = self.ew("apply", "story", "--accept", "S-001")
+        self.assertEqual(code, 0, out)
+        self.assertIn("she whispered.", (self.job / "edited.md").read_text(encoding="utf-8"))
+        bad = [{"level": "line", "category": "clutter", "para": 2, "quote": "slowly", "bracket": True,
+                "change": {"replace": "fast"}, "problem": "x"}]
+        code, out = self.suggest(bad)
+        self.assertEqual(code, 1)
+        self.assertIn("a bracket is a cut", out)
+
     def test_docx_source(self):
         d = self.tmp / "story.docx"
         ew.write_docx(d, ["## Chapter 1", "It was dark.", "She waited."])
