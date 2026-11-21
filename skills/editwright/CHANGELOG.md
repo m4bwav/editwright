@@ -4,6 +4,11 @@ Every change to [SKILL.md](SKILL.md) and its companions, newest first, each with
 
 Entry shape: `### C-YYYYMMDD-n · date · one-line summary`, then `because:` (IDs or "user request"), `files:` (file and section), and a sentence on what changed. Cite section headings, not line numbers.
 
+### C-20261121-2 · 2026-11-21 · Release 0.5.0
+- because: C-20261121-1
+- files: plugin.json, .claude-plugin/plugin.json, scripts/ew.py (VERSION), SKILL.md (metadata.version), evergreen.json (version)
+- Version 0.4.0 to 0.5.0, tag v0.5.0. Minor: bracketed cuts and new skim, link-count and argument-order checks.
+
 ### C-20261121-1 · 2026-11-21 · Bracketed cuts, first-sentence skim, paragraph-link count, argument-order checks
 - because: user request (book harvest round 7: Zinsser, *On Writing Well*, ch. 3, 9; Garner, *Legal Writing in Plain English*, sec. 5, 24, 25, 30; Scalia and Garner, *Making Your Case*, sec. 7-12, 19-21); book rules, unverified against readers; the one-third bridge floor is a seminar target
 - files: kb/argument.md (new), kb/INDEX.md, kb/nonfiction.md (pointer), SKILL.md (Step 3, item 2), references/suggestion-format.md (`bracket`), scripts/ew.py (bracket items, show --firsts, bridge_lists, stats line), tests/test_ew.py
